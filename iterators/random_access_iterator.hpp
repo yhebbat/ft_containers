@@ -11,17 +11,17 @@ namespace ft
         private:
             T   *_ptr;
         public:
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::T         value_type;
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::Distance  difference_type;
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::Pointer   pointer;
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::Reference reference;
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::Category  iterator_category;
+            typedef typename iterator_traits<std::random_access_iterator_tag, T>::value_type value_type;
+            typedef typename iterator_traits<std::random_access_iterator_tag, T>::diffetence_type  difference_type;
+            typedef typename iterator_traits<std::random_access_iterator_tag, T>::pointer   pointer;
+            typedef typename iterator_traits<std::random_access_iterator_tag, T>::reference reference;
+            typedef typename iterator_traits<std::random_access_iterator_tag, T>::iterator_category  iterator_category;
 
             //////////////////////////////////////////////////////////////////////////////////////////
             ////////////--------------------CONSTRACTORS && DESTRACTOS--------------------////////////
             //////////////////////////////////////////////////////////////////////////////////////////
             my_random_iterator(): _ptr(nullptr) {};
-            my_random_iterator(my_random_iterator const &to_copy) { _ptr = to_copy._ptr; };
+            my_random_iterator(my_random_iterator const &to_copy) { _ptr = to_copy.base(); };
             my_random_iterator(T *to_copy)
             {
                 if (this != &rhs)
@@ -34,20 +34,20 @@ namespace ft
             my_random_iterator& operator=(my_random_iterator const & rhs)
             {
                 if (this != &rhs)
-                    this->_ptr = rhs._ptr;
+                    this->_ptr = rhs.base();
                 return (*this);
             };
             //////////////////////////////////////////////////////////////////////////
             ////////////--------------------COMPARAISON--------------------///////////
             //////////////////////////////////////////////////////////////////////////
-            bool operator==(my_random_iterator const& a)
+            friend bool operator==(my_random_iterator const& a) const
             {
                 if (this->_ptr == a._ptr)
                     return true;
                 else
                     return false;
             }
-            bool operator!=(my_random_iterator const& a)
+            friend bool operator!=(my_random_iterator const& a) const 
             {
                 if (this->_ptr == a._ptr)
                     return false;
@@ -68,17 +68,15 @@ namespace ft
             //////////////////////////////////////////////////////////////////////////
             my_random_iterator& operator++() {++_ptr; return *this;};
             my_random_iterator operator++(int) const {my_random_iterator tmp(*this); ++_ptr; return tmp;};
-            //*a++ TO DO
             ////////////////////////////////////////////////////////////////////////////////////////////
             ////////////---Can be decremented (if a dereferenceable iterator value precedes it)---//////
             ////////////////////////////////////////////////////////////////////////////////////////////
             my_random_iterator& operator--() {--_ptr; return *this;};
             my_random_iterator operator--(int) const {my_random_iterator tmp(*this); --_ptr; return tmp;};
-            //*a-- TO DO
             ///////////////////////////////////////////////////////////////
             ////////////---Supports the arithmetic operators---////////////
             ///////////////////////////////////////////////////////////////
-            difference_type operator-(const my_random_iterator& rhs) const {return (_ptr - rhs.ptr);};
+            difference_type operator-(const my_random_iterator& rhs) const {return (_ptr - rhs.base());};
             my_random_iterator operator+(difference_type rhs) const {return my_random_iterator(_ptr+rhs);};
             my_random_iterator operator-(difference_type rhs) const {return my_random_iterator(_ptr-rhs);};
             friend my_random_iterator operator+(difference_type lhs, const my_random_iterator& rhs) {return my_random_iterator(lhs+rhs._ptr);};
@@ -99,8 +97,11 @@ namespace ft
             ///////-----Supports the offset dereference operator ([])-----/////
             ///////////////////////////////////////////////////////////////////
             T& operator[](difference_type rhs) const {return (_ptr[rhs]);}
+
+            //////// BASE /////////
+            pointer base() const {return _ptr;};
+
     };
 }
-
 
 #endif
