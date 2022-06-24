@@ -5,14 +5,14 @@
 
 namespace ft
 {
-    template <class T>
+    template <typename T>
     class my_random_iterator
     {
         private:
             T   *_ptr;
         public:
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::value_type value_type;
             typedef typename iterator_traits<std::random_access_iterator_tag, T>::diffetence_type  difference_type;
+            typedef typename iterator_traits<std::random_access_iterator_tag, T>::value_type value_type;
             typedef typename iterator_traits<std::random_access_iterator_tag, T>::pointer   pointer;
             typedef typename iterator_traits<std::random_access_iterator_tag, T>::reference reference;
             typedef typename iterator_traits<std::random_access_iterator_tag, T>::iterator_category  iterator_category;

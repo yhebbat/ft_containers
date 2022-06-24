@@ -37,6 +37,8 @@
         "__split_buffer": "cpp",
         "bitset": "cpp",
         "initializer_list": "cpp",
-        "__node_handle": "cpp"
+        "__node_handle": "cpp",
+        "__string": "cpp",
+        "version": "cpp"
     }
 }
