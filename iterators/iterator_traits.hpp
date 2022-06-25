@@ -15,8 +15,9 @@ namespace ft
         typedef Reference reference;
         typedef Category  iterator_category;
     };
-	template <class Iterator>
-	struct iterator_traits {
+	template <class iterator>
+	struct iterator_traits
+	{
 			typedef typename iterator::difference_type		difference_type;
 			typedef typename iterator::value_type			value_type;
 			typedef typename iterator::pointer				pointer;
@@ -24,7 +25,8 @@ namespace ft
 			typedef typename iterator::iterator_category	iterator_category;
 	};
 	template <class T>
-	struct iterator_traits<T*> {
+	struct iterator_traits<T*>
+	{
 			typedef	std::ptrdiff_t						difference_type;
 			typedef	T									value_type;
 			typedef	T*									pointer;
@@ -32,7 +34,8 @@ namespace ft
 			typedef	std::random_access_iterator_tag		iterator_category;
 	};
 	template <class T>
-	struct iterator_traits<const T*> {
+	struct iterator_traits<const T*>
+	{
 			typedef	std::ptrdiff_t						difference_type;
 			typedef	 T									value_type;
 			typedef	const T*							pointer;

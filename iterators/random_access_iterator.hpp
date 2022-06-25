@@ -2,6 +2,7 @@
 #define RANDOM_ACCESS_ITERATOR_HPP
 
 #include "iterator_traits.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft
 {
@@ -11,22 +12,18 @@ namespace ft
         private:
             T   *_ptr;
         public:
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::diffetence_type  difference_type;
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::value_type value_type;
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::pointer   pointer;
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::reference reference;
-            typedef typename iterator_traits<std::random_access_iterator_tag, T>::iterator_category  iterator_category;
+            typedef typename ft::iterator<std::random_access_iterator_tag, T>::difference_type	difference_type;
+            typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type		value_type;
+            typedef typename ft::iterator<std::random_access_iterator_tag, T>::pointer			pointer;
+            typedef typename ft::iterator<std::random_access_iterator_tag, T>::reference			reference;
+            typedef typename ft::iterator<std::random_access_iterator_tag, T>::iterator_category	iterator_category;
 
             //////////////////////////////////////////////////////////////////////////////////////////
             ////////////--------------------CONSTRACTORS && DESTRACTOS--------------------////////////
             //////////////////////////////////////////////////////////////////////////////////////////
             my_random_iterator(): _ptr(nullptr) {};
             my_random_iterator(my_random_iterator const &to_copy) { _ptr = to_copy.base(); };
-            my_random_iterator(T *to_copy)
-            {
-                if (this != &rhs)
-                    this->_ptr = to_copy;
-            };
+            my_random_iterator(T *to_copy) { this->_ptr = to_copy;};
             ~my_random_iterator() {};
             //////////////////////////////////////////////////////////////////////////
             ////////////--------------------ASSIGNMENT--------------------////////////
@@ -40,16 +37,16 @@ namespace ft
             //////////////////////////////////////////////////////////////////////////
             ////////////--------------------COMPARAISON--------------------///////////
             //////////////////////////////////////////////////////////////////////////
-            friend bool operator==(my_random_iterator const& a) const
+            bool operator==(my_random_iterator const& a) const
             {
-                if (this->_ptr == a._ptr)
+                if (this->_ptr == a.base())
                     return true;
                 else
                     return false;
             }
-            friend bool operator!=(my_random_iterator const& a) const 
+            bool operator!=(my_random_iterator const& a) const 
             {
-                if (this->_ptr == a._ptr)
+                if (this->_ptr == a.base())
                     return false;
                 else
                     return true;
@@ -67,12 +64,12 @@ namespace ft
             ////////////---Can be incremented (if in a dereferenceable state)---//////
             //////////////////////////////////////////////////////////////////////////
             my_random_iterator& operator++() {++_ptr; return *this;};
-            my_random_iterator operator++(int) const {my_random_iterator tmp(*this); ++_ptr; return tmp;};
+            my_random_iterator operator++(int) {my_random_iterator tmp(*this); ++_ptr; return tmp;};
             ////////////////////////////////////////////////////////////////////////////////////////////
             ////////////---Can be decremented (if a dereferenceable iterator value precedes it)---//////
             ////////////////////////////////////////////////////////////////////////////////////////////
             my_random_iterator& operator--() {--_ptr; return *this;};
-            my_random_iterator operator--(int) const {my_random_iterator tmp(*this); --_ptr; return tmp;};
+            my_random_iterator operator--(int) {my_random_iterator tmp(*this); --_ptr; return tmp;};
             ///////////////////////////////////////////////////////////////
             ////////////---Supports the arithmetic operators---////////////
             ///////////////////////////////////////////////////////////////
