@@ -4,6 +4,9 @@
 #include "iterators/bidirectional_iterator.hpp"
 #include "iterators/random_access_iterator.hpp"
 #include "iterators/reverse_iterator.hpp"
+#include <iostream>
+#include <iterator>
+#include <vector>
 
 // class MyIterator : public std::iterator<std::input_iterator_tag, int>
 // {
@@ -32,14 +35,14 @@ int main () {
 
 // int main()
 // {
-//     int a[] {0, 1, 2, 3};
+//     int a[]={0, 1, 2, 3};
 //     //             ↑  └───── x, y
 //     //             └──────── z
  
 //     ft::my_reverse_iterator<int*>
-//         x { std::rend(a) - std::size(a) },
-//         y { std::rend(a) - std::size(a) },
-//         z { std::rbegin(a) + 1 };
+//         x= (&a + 4) ;
+//         // y= {(&a + 4)},
+//         // z= {(&a + 3)};
  
 //     std::cout
 //         << std::boolalpha
