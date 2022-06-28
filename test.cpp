@@ -4,6 +4,7 @@
 #include "iterators/bidirectional_iterator.hpp"
 #include "iterators/random_access_iterator.hpp"
 #include "iterators/reverse_iterator.hpp"
+#include "vector/vector.hpp"
 #include <iostream>
 #include <iterator>
 #include <vector>
@@ -21,17 +22,36 @@
 // 	int& operator*() {return *p;}
 // };
 
-int main () {
-  int numbers[]={10,20,30,40,50};
-  // ft::my_random_iterator<int> numbers(num);
-  ft::my_random_iterator<int> from(numbers);
-  ft::my_random_iterator<int> until(numbers + 5);
-  for (ft::my_random_iterator<int> it=from; it!=until; it++)
-    std::cout << *it << ' ';
-  std::cout << '\n';
 
+int main () {
+    ft::vector<char> t;
+
+    t.push_back('u');
+    t.push_back('e');
+    t.push_back('d');
+    t.push_back('f');
+    t.push_back('C');
+
+
+    for (ft::vector<char>::iterator it = t.begin(); it != t.end(); it++)
+      std::cout << *it << std::endl;
+    std::cout << t.size() << std::endl;
+    t.clear();
+    std::cout << t.size() << std::endl;
   return 0;
 }
+
+// int main () {
+//   int numbers[]={10,20,30,40,50};
+//   // ft::my_random_iterator<int> numbers(num);
+//   ft::my_random_iterator<int> from(numbers);
+//   ft::my_random_iterator<int> until(numbers + 5);
+//   for (ft::my_random_iterator<int> it=from; it!=until; it++)
+//     std::cout << *it << ' ';
+//   std::cout << '\n';
+
+//   return 0;
+// }
 
 // int main()
 // {

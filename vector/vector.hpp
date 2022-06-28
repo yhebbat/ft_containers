@@ -11,6 +11,7 @@
 # include <memory>
 
 #include "../iterators/random_access_iterator.hpp"
+#include "../iterators/reverse_iterator.hpp"
 #include "../utilities/utilities.hpp"
 
 namespace ft
@@ -76,9 +77,13 @@ namespace ft
 				};
 
 			vector (const vector& x):
-			_alloc(alloc), _first(nullptr), _last(nullptr), _size(0), _capacity(0) { *this = x; };
+			 _first(nullptr), _last(nullptr), _size(0), _capacity(0) { *this = x; };
 		
-            ~vector();//TO DO
+            ~vector()
+			{
+				this->clear();
+				_alloc.deallocate(_first, _capacity);
+			}
 		//////////////////////////////////////////////////////////////////////////////////////////
 		///////////Assign content/////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////
@@ -104,13 +109,13 @@ namespace ft
 		//////////////////////////////////////////////////////////////////////////////////////////
 		////////////A reverse iterator to the reverse beginning of the sequence container.////////
 		//////////////////////////////////////////////////////////////////////////////////////////
-			reverse_iterator rbegin() { return(my_reverse_iterator(this->_last));};
-			const_reverse_iterator rbegin() const { return(my_reverse_iterator(this->_last));};
+			reverse_iterator rbegin() { return(reverse_iterator(this->_last));};
+			const_reverse_iterator rbegin() const { return(reverse_iterator(this->_last));};
 		//////////////////////////////////////////////////////////////////////////////////////////
 		////////////A reverse iterator to the reverse end of the sequence container.//////////////
 		//////////////////////////////////////////////////////////////////////////////////////////
-			reverse_iterator rend() { return(my_reverse_iterator(this->_first));};
-			const_reverse_iterator rend() const { return(my_reverse_iterator(this->_first));};
+			reverse_iterator rend() { return(reverse_iterator(this->_first));};
+			const_reverse_iterator rend() const { return(reverse_iterator(this->_first));};
 		//////////////////////////////////////////////////////////////////////////////////////////
 		////////////Returns the number of elements in the vector./////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////
@@ -274,7 +279,7 @@ namespace ft
 				if (this->size() == 0)
 					reserve(1);
 				else if (this->size() == this->capacity())
-					reserve(this->size() * 2)
+					reserve(this->size() * 2);
 				_alloc.construct(_last, val);
 				_size++;
 				_last++;
@@ -339,7 +344,7 @@ namespace ft
 				_size += n;
 				for (size_type i = 0; i < dist_from_last; i++)
 					_alloc.construct(_last - i - 1, *(_last - n - i - 1));
-				for (size_type i = 0; i < n; j++)
+				for (size_type i = 0; i < n; i++)
 					_alloc.construct(_last - dist_from_last - i - 1, val);//dist_from_last -> n
 			}
 
@@ -383,7 +388,7 @@ namespace ft
 					this->_alloc.destroy(here);
 					for (size_t i = 0; i < this->_last - here - 1; i++)
 					{
-						this->_alloc.construct(pos + i, *(here + i + 1));
+						this->_alloc.construct(here + i, *(here + i + 1));
 					}		
 				}
 				pop_back();
@@ -435,10 +440,9 @@ namespace ft
 		/////////////////////////////////////////////////////////////////////////////////////////
 			allocator_type get_allocator() const {allocator_type allocat(_alloc); return (allocat); }
     };
-}
 
 template <class T, class Alloc>
-friend bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 {
 	if (lhs.size() != rhs.size())
 		return (false);
@@ -478,5 +482,6 @@ template <class T, class Alloc>
 void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
 {
 	x.swap(y);
+}
 }
 #endif
