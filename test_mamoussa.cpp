@@ -19,6 +19,10 @@
 # include <signal.h>
 # include <sys/time.h>
 # include "vector/vector.hpp"
+#include "iterators/random_access_iterator.hpp"
+#include "iterators/reverse_iterator.hpp"
+#include "utilities/utilities.hpp"
+
 
 
 # define BLUE "\e[0;34m"

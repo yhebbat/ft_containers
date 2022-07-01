@@ -63,7 +63,7 @@ int main () {
 //     //             ↑  └───── x, y
 //     //             └──────── z
  
-//     ft::my_reverse_iterator<int*>
+//     ft::reverse_iterator<int*>
 //         x= (&a + 4) ;
 //         // y= {(&a + 4)},
 //         // z= {(&a + 3)};

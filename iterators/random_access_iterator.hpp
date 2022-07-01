@@ -22,7 +22,7 @@ namespace ft
             ////////////--------------------CONSTRACTORS && DESTRACTOS--------------------////////////
             //////////////////////////////////////////////////////////////////////////////////////////
             my_random_iterator(): _ptr(nullptr) {};
-            my_random_iterator(my_random_iterator const &to_copy) { _ptr = to_copy.base(); };
+            my_random_iterator(const my_random_iterator &to_copy) { this->_ptr = to_copy._ptr; };
             my_random_iterator(T *to_copy) { this->_ptr = to_copy;};
             ~my_random_iterator() {};
             //////////////////////////////////////////////////////////////////////////
@@ -97,6 +97,10 @@ namespace ft
 
             //////// BASE /////////
             pointer base() const {return _ptr;};
+
+            operator my_random_iterator<const T>() const {
+                return my_random_iterator<const T>(_ptr);
+            }
     };
 }
 
