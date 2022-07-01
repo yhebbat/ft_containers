@@ -92,7 +92,7 @@ namespace ft
 				this->_capacity = x._capacity;
 				this->_size = x._size;
 				this->_first = x._first;
-				this->_last = x->_last;
+				this->_last = x._last;
 				for (size_t i = 0; i < this->_size; i++)
 					this->_alloc.construct((this->_first + i), *(x._first + i));
 			}
@@ -100,22 +100,22 @@ namespace ft
 		////////////Returns an iterator pointing to the first element in the vector.//////////////
 		//////////////////////////////////////////////////////////////////////////////////////////
 			iterator begin(){ return(this->_first); };
-			const_iterator begin() const{ return(this->_first); };
+			const_iterator begin() const{ return(const_iterator(this->_first)); };
 		//////////////////////////////////////////////////////////////////////////////////////////
 		////////////An iterator to the element past the end of the sequence.//////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////
-			iterator end(){ return(this->_last); };
-			const_iterator end() const{ return(this->_last); };
+			iterator end(){ return(iterator(this->_last)); };
+			const_iterator end() const{ return(const_iterator(this->_last)); };
 		//////////////////////////////////////////////////////////////////////////////////////////
 		////////////A reverse iterator to the reverse beginning of the sequence container.////////
 		//////////////////////////////////////////////////////////////////////////////////////////
-			reverse_iterator rbegin() { return(reverse_iterator(this->_last));};
-			const_reverse_iterator rbegin() const { return(reverse_iterator(this->_last));};
+			reverse_iterator rbegin() { return(reverse_iterator(end()));};
+			const_reverse_iterator rbegin() const { return(const_reverse_iterator(end()));};
 		//////////////////////////////////////////////////////////////////////////////////////////
 		////////////A reverse iterator to the reverse end of the sequence container.//////////////
 		//////////////////////////////////////////////////////////////////////////////////////////
-			reverse_iterator rend() { return(reverse_iterator(this->_first));};
-			const_reverse_iterator rend() const { return(reverse_iterator(this->_first));};
+			reverse_iterator rend() { return(reverse_iterator(begin()));};
+			const_reverse_iterator rend() const { return(reverse_iterator( begin()));};
 		//////////////////////////////////////////////////////////////////////////////////////////
 		////////////Returns the number of elements in the vector./////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////

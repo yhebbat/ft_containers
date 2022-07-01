@@ -97,7 +97,6 @@ namespace ft
 
             //////// BASE /////////
             pointer base() const {return _ptr;};
-
     };
 }
 

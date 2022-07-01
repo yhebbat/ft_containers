@@ -32,12 +32,16 @@ int main () {
     t.push_back('f');
     t.push_back('C');
 
+    // ft::vector<char>::reverse_iterator r = t.rbegin();
 
+    // ft::vector<char>::reverse_iterator it;
+    // it = t.rbegin();
+    // std::cout << "++++++" << r[0] << std::endl;
     for (ft::vector<char>::iterator it = t.begin(); it != t.end(); it++)
-      std::cout << *it << std::endl;
-    std::cout << t.size() << std::endl;
+     std::cout << *it << std::endl;
+    // std::cout << t.size() << std::endl;
     t.clear();
-    std::cout << t.size() << std::endl;
+    // std::cout << t.size() << std::endl;
   return 0;
 }
 

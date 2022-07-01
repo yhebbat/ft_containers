@@ -22,9 +22,9 @@ namespace ft
         // typedef typename iterator_traits<iterator>::pointer            pointer;
         // typedef typename iterator_traits<iterator>::reference          reference;
         // typedef	typename iterator_traits<iterator>::iterator_category	iterator_category;
-        my_reverse_iterator():_it(iterator()) {};
+        my_reverse_iterator():_it() {};
         my_reverse_iterator (iterator_type  it): _it(it){};
-        my_reverse_iterator (const iterator_type  &it): _it(it){};
+        // my_reverse_iterator (const iterator_type  it): _it(it){};
         my_reverse_iterator (const my_reverse_iterator &x):_it(x.base()){};
         template <typename Iter> my_reverse_iterator (const my_reverse_iterator< Iter > &x) {*this = x;};
         
