@@ -28,8 +28,8 @@ namespace ft
             typedef typename allocator_type::const_reference			const_reference;
             typedef typename allocator_type::pointer					pointer;
             typedef typename allocator_type::const_pointer				const_pointer;
-            typedef ft::my_random_iterator<value_type>					iterator;
-            typedef ft::my_random_iterator<const value_type>			const_iterator;
+            typedef ft::random_access_iterator<value_type>					iterator;
+            typedef ft::random_access_iterator<const value_type>			const_iterator;
             typedef ft::reverse_iterator<iterator>					reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type	difference_type;
@@ -55,7 +55,7 @@ namespace ft
 						throw std::length_error("vector");
 					_size = n;
 					_capacity = n;
-					if(this->_size > n)
+					if(this->_size > 0)
 					{
 						this->_first = this->_alloc.allocate(n);
 						this->_last = this->_first + n;
@@ -89,17 +89,22 @@ namespace ft
 		//////////////////////////////////////////////////////////////////////////////////////////
 			vector& operator= (const vector& x)
 			{
-				this->_capacity = x._capacity;
+				for (size_t i = 0; i < _size; i++)
+					_alloc.destroy(_first + i);
+				_alloc.deallocate(_first, _capacity);
 				this->_size = x._size;
-				this->_first = x._first;
-				this->_last = x._last;
+				this->_capacity = x._capacity;
+				this->_first = _alloc.allocate(this->_capacity);
+				this->_last = this->_first + _size;
 				for (size_t i = 0; i < this->_size; i++)
 					this->_alloc.construct((this->_first + i), *(x._first + i));
+				this->_alloc = x._alloc;
+				return(*this);
 			}
 		//////////////////////////////////////////////////////////////////////////////////////////
 		////////////Returns an iterator pointing to the first element in the vector.//////////////
 		//////////////////////////////////////////////////////////////////////////////////////////
-			iterator begin(){ return(this->_first); };
+			iterator begin(){ return(iterator(this->_first)); };
 			const_iterator begin() const{ return(const_iterator(this->_first)); };
 		//////////////////////////////////////////////////////////////////////////////////////////
 		////////////An iterator to the element past the end of the sequence.//////////////////////
@@ -156,6 +161,7 @@ namespace ft
 						_alloc.construct(first + i, val);
 					for (pointer it = _first; it < _last; it++)
 						_alloc.destroy(it);
+					_alloc.deallocate(_first, _capacity);
 					_first = first;
 					_last = last;
 					_size = n;
@@ -226,7 +232,8 @@ namespace ft
 		////////////Assign vector content////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////////////////
 			template <class InputIterator>
-			void assign (InputIterator first, InputIterator last)
+			void assign (InputIterator first, InputIterator last,
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 			{
 				size_t n;
 				n = last - first;
@@ -287,7 +294,7 @@ namespace ft
 		/////////////////////////////////////////////////////////////////////////////////////////
 		////////////remove element at the end/////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////////////////
-			void pop_back (const value_type& val)
+			void pop_back ()
 			{
 				if (this->size() != 0)
 				{
@@ -314,8 +321,8 @@ namespace ft
 					reserve(this->_capacity * 2);
 				size_t i;
 				for (i = 0; i < dist_from_last; i++)
-					this->_alloc.costruct(_last - i, *(_last - i - 1));
-				this->_alloc.costruct(_last - i, val);
+					this->_alloc.construct(_last - i, *(_last - i - 1));
+				this->_alloc.construct(_last - i, val);
 				_last++;
 				_size++;
 				return(_first + dist_from_last);
@@ -392,7 +399,7 @@ namespace ft
 					}		
 				}
 				pop_back();
-				return(itrator(here));
+				return(iterator(here));
 			}
 			
 			iterator erase (iterator first, iterator last)
@@ -475,7 +482,7 @@ bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 template <class T, class Alloc>
 bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 {
-	return !(rhs < lhs);
+	return !(lhs < rhs);
 }
 
 template <class T, class Alloc>

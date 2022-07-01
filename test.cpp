@@ -39,6 +39,7 @@ int main () {
     // std::cout << "++++++" << r[0] << std::endl;
     for (ft::vector<char>::iterator it = t.begin(); it != t.end(); it++)
      std::cout << *it << std::endl;
+    std::cout << t[0] << std::endl;
     // std::cout << t.size() << std::endl;
     t.clear();
     // std::cout << t.size() << std::endl;
@@ -47,10 +48,10 @@ int main () {
 
 // int main () {
 //   int numbers[]={10,20,30,40,50};
-//   // ft::my_random_iterator<int> numbers(num);
-//   ft::my_random_iterator<int> from(numbers);
-//   ft::my_random_iterator<int> until(numbers + 5);
-//   for (ft::my_random_iterator<int> it=from; it!=until; it++)
+//   // ft::random_access_iterator<int> numbers(num);
+//   ft::random_access_iterator<int> from(numbers);
+//   ft::random_access_iterator<int> until(numbers + 5);
+//   for (ft::random_access_iterator<int> it=from; it!=until; it++)
 //     std::cout << *it << ' ';
 //   std::cout << '\n';
 
@@ -64,9 +65,9 @@ int main () {
 //     //             └──────── z
  
 //     ft::reverse_iterator<int*>
-//         x= (&a + 4) ;
-//         // y= {(&a + 4)},
-//         // z= {(&a + 3)};
+//         x= (&a + 4) ,
+//         y= {(&a + 4)},
+//         z= {(&a + 3)};
  
 //     std::cout
 //         << std::boolalpha

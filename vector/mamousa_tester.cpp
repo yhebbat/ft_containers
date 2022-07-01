@@ -18,10 +18,10 @@
 # include <unistd.h>
 # include <signal.h>
 # include <sys/time.h>
-# include "vector/vector.hpp"
-#include "iterators/random_access_iterator.hpp"
-#include "iterators/reverse_iterator.hpp"
-#include "utilities/utilities.hpp"
+# include "vector.hpp"
+#include "../iterators/random_access_iterator.hpp"
+#include "../iterators/reverse_iterator.hpp"
+#include "../utilities/utilities.hpp"
 
 
 
