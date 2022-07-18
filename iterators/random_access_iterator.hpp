@@ -88,6 +88,7 @@ namespace ft
             ///////////////////////////////////////////////////////////////////
             ///////---Supports compound assignment operations += and -=---/////
             ///////////////////////////////////////////////////////////////////
+            
             random_access_iterator& operator+=(difference_type rhs) {_ptr += rhs; return *this;}
             random_access_iterator& operator-=(difference_type rhs) {_ptr -= rhs; return *this;}
             ///////////////////////////////////////////////////////////////////
