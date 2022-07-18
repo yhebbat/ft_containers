@@ -75,8 +75,8 @@ void    iterator_tests(void)
 	EQUAL((it == it1) == (my_it == my_it1));
 	std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " != operator " << "] --------------------]\t\t\033[0m";
 	EQUAL((it != it1) == (my_it != my_it1));
-	EQUAL((it > it1) == (my_it > my_it1));
 	std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " > operator " << "] --------------------]\t\t\033[0m";
+	EQUAL((it > it1) == (my_it > my_it1));
 	std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " >= operator " << "] --------------------]\t\t\033[0m";
 	EQUAL((it >= it1) == (my_it >= my_it1));
 	std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " < operator " << "] --------------------]\t\t\033[0m";
