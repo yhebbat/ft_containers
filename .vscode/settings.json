@@ -68,7 +68,8 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "__functional_base": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "deque": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
