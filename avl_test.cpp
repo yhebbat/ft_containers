@@ -63,6 +63,7 @@ class avl_tree
     ~avl_tree() {};
 	// ~avl_tree() { delete _root; };
 
+	//**********calculate the height of the tree
 	int calcul_height(node *p)//calculate the height of the tree
 	{
 		if(p->left && p->right)
@@ -90,6 +91,49 @@ class avl_tree
 		return 0;
 	}
 
+	//****************find the node in the tree
+
+	node *find_min(node *p)//find the node in the tree
+	{
+		if(p->left)
+			return find_min(p->left);
+		else
+			return p;
+	}
+
+	node *find_max(node *p)//find the node in the tree
+	{
+		if(p->right)
+			return find_max(p->right);
+		else
+			return p;
+	}
+
+	bool exist(node* p, int data)//check if the data is in the tree
+	{
+		if(p == NULL)
+			return false;
+		if(p->data == data)
+			return true;
+		if(p->data > data)
+			return exist(p->left, data);
+		else
+			return exist(p->right, data);
+	}
+
+	node* search(node* p, int data)//search the data in the tree
+	{
+		if(p == NULL)
+			return NULL;
+		if(p->data == data)
+			return p;
+		if(p->data > data)
+			return search(p->left, data);
+		else
+			return search(p->right, data);
+	}
+
+	//*****************roatations
 	node* llrotation(node *n)
 	{
         node *p;
@@ -149,8 +193,22 @@ class avl_tree
 		// p->left = rrrotation(tp);
 		// return (llrotation(p));
 	}
+	//**********************modifiers for the tree
 
-	node* insert(node *r,int data)
+	void clear(node* &p)//delete the tree
+	{
+		if (p == NULL)
+			return;
+		// _alloc.destroy(&(p->data));
+		if(p->left)
+			clear(p->left);
+		if(p->right)
+			clear(p->right);
+		delete(p);// _alloc_node.deallocate(p, 1);
+		p = NULL;
+	}
+
+	node* insert_(node *r,int data)
 	{
 		if(r == NULL)
 		{
@@ -165,9 +223,9 @@ class avl_tree
 		else
 		{
 			if(data < r->data)
-				r->left = insert(r->left, data);
+				r->left = insert_(r->left, data);
 			else
-				r->right = insert(r->right, data);
+				r->right = insert_(r->right, data);
 		}
 		r->height = calcul_height(r);
 		if(bf(r)==2 && bf(r->left)==1)
@@ -242,6 +300,7 @@ class avl_tree
         return p;
     }
 
+	//************display the tree in the following format:
 	void print_tree(node *r)
 	{
 		if (r == NULL)
@@ -251,7 +310,7 @@ class avl_tree
 		}
 		print_tree(r, "", true);
     }
-
+	
     void print_tree(node *root, std::string indent, bool last)
 	{
         if (root != nullptr)
@@ -277,18 +336,30 @@ class avl_tree
 
 int main() {
 	avl_tree root;
-	root._root = root.insert(root._root, 33);
-	root._root = root.insert(root._root, 13);
-	root._root = root.insert(root._root, 53);
-	root._root = root.insert(root._root, 9);
-	root._root = root.insert(root._root, 21);
-	root._root = root.insert(root._root, 61);
-	root._root = root.insert(root._root, 8);
-	root._root = root.insert(root._root, 11);
+	root._root = root.insert_(root._root, 33);
+	root._root = root.insert_(root._root, 13);
+	root._root = root.insert_(root._root, 53);
+	root._root = root.insert_(root._root, 9);
+	root._root = root.insert_(root._root, 21);
+	root._root = root.insert_(root._root, 61);
+	root._root = root.insert_(root._root, 8);
+	root._root = root.insert_(root._root, 11);
 	root.print_tree(root._root);
+	// if (root.exist(root._root, 13))
+	// 	std::cout << "13 Found" << std::endl;
+	// else
+	// 	std::cout << "13 Not found" << std::endl;
 	root._root = root.delete_(root._root, 13);
 	std::cout << "After deleting " << std::endl;
+	// if (root.exist(root._root, 13))
+	// 	std::cout << "13 Found" << std::endl;
+	// else
+	// 	std::cout << "13 Not found" << std::endl;
 	root.print_tree(root._root);
+	std::cout << "After deleting all" << std::endl;
+	root.clear(root._root);
+	root.print_tree(root._root);
+
 }
 
 // int main(){
@@ -298,7 +369,7 @@ int main() {
 
 //     do{
 //         cout<<"\n1.Display levelorder on newline";
-//         cout<<"\n2.Insert";
+//         cout<<"\n2.insert_";
 //         cout<<"\n3.Delete\n";
 //         cout<<"\n0.Exit\n";
 //         cout<<"\nChoice: ";
@@ -315,7 +386,7 @@ int main() {
 //         case 2:
 //             cout<<"\nEnter no. ";
 //             cin>>x;
-//             b.root = b.insert(b.root,x);
+//             b.root = b.insert_(b.root,x);
 //             break;
         
 //         case 3:
