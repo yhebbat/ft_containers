@@ -69,7 +69,10 @@
         "typeinfo": "cpp",
         "__functional_base": "cpp",
         "iomanip": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "queue": "cpp",
+        "stack": "cpp",
+        "__functional_03": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

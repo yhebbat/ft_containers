@@ -1,29 +1,24 @@
 
 #include <iostream>
+#include "./utilities/utilities.hpp"
 
-// class node 
-// {
-//     int data;
-//     int height;
-//     node *left;
-//     node *right;
-
-    
-// };
-
+template <class T>
 class node {
   public:
-    int data;
+    // int data;
+	T	data;
     int height;
     node *left;
     node *right;
+	node *parent;
 
-    node(int data):data(data),height(0),left(NULL),right(NULL){};
+    node(T data):data(data),height(0),left(NULL),right(NULL){};
     ~node() {};
 	node() {
             this->left = NULL;
             this->right = NULL;
             this->height = 0;
+			this->parent = NULL;
 	}
 	node(const node& rhs)
 	{
@@ -31,56 +26,109 @@ class node {
 		this->height = rhs.height;
 		this->left = rhs.left;
 		this->right = rhs.right;
-	}
+		this->parent = rhs.parent;
+	};
 
 	bool operator== (const node& rhs)
 	{
-		return (this->data == rhs.data 
-			&& this->height == rhs.height && this->left == rhs.left && this->right == rhs.right);
-	}
+		return (this->data == rhs.data);
+	};
+
 	bool operator!= (const node& rhs)
 	{
 		return !(*this == rhs);
-	}
+	};
 	node &operator=(const node& rhs)
 	{
 		this->data = rhs.data;
 		this->height = rhs.height;
 		this->left = rhs.left;
 		this->right = rhs.right;
+		this->parent = rhs.parent;
 		return *this;
-	}
+	};
 
 };
 
-// template < class T, class Alloc = std::allocator<T> >
+// template < class key, class T, class Alloc = std::allocator<T>, class Allconode = std::allocator<node<T> > >
+    template <class Key,                                          // map::key_type
+              class T,                                             // map::mapped_type
+              class Compare = std::less<Key>,                      // map::key_compare
+            //   class Alloc = std::allocator<ft::pair<const Key, T> >, // map::allocator_type
+			  class Alloc = std::allocator<T>,
+			  class Allconode = std::allocator<node<T> >
+              >
 class avl_tree
 {
   public:
-    node   *_root;
-    avl_tree() { _root = NULL; };
-	// avl_tree() { _root = new node(); };
-    ~avl_tree() {};
-	// ~avl_tree() { delete _root; };
+	typedef node<T>					node_type;
+	typedef Alloc					allocator_type;
+	typedef Allconode				alloc_node;
 
+	private:
+	node_type		*_root;
+	allocator_type	_alloc;
+	alloc_node		_alloc_node;
+	size_t			_size;
+
+	public:
+    avl_tree():_size(0) { _root = NULL; };
+	avl_tree(const avl_tree &other) : _root(other._root), _size(other._size)
+	{
+		*this = other;
+	}
+    ~avl_tree() {};
+
+	avl_tree &operator=(const avl_tree& rhs) 
+	{
+		this->_alloc = rhs._alloc;
+		this->_alloc_node = rhs._alloc_node;
+		insert_nodes(rhs._root);
+		return (*this);
+	};
+
+	void insert_nodes(node_type *node)
+	{
+		if (node == NULL)
+			return;
+		insert_(node->data);
+		if (node->left != NULL)
+			insert_nodes(node->left);
+		if (node->right != NULL)
+			insert_nodes(node->right);
+	}
 	//**********calculate the height of the tree
-	int calcul_height(node *p)//calculate the height of the tree
+
+	int calcul_height(node_type *p)//calculate the height of the tree
 	{
 		if(p->left && p->right)
 		{
 			if (p->left->height < p->right->height)
+			{
+				// std::cout << p->data << "height is :" << p->right->height << std::endl;
 				return (p->right->height + 1);
+			}
 			else
+			{
+				// std::cout << p->data << "height is :" << p->left->height << std::endl;
 				return  (p->left->height + 1);
+			}
 		}
 		else if(p->left && p->right == NULL)
+		{
+			// std::cout << p->data << "height is :" << p->left->height << std::endl;
 			return (p->left->height + 1);
-		else if(p->left ==NULL && p->right)
+		}
+		else if(p->left == NULL && p->right)
+		{
+			// std::cout << p->data << " height is :" << p->right->height << ":::" << p->right->data << std::endl;
 			return (p->right->height + 1);
-		return 0;
+		}
+		// std::cout << p->data << "height is :0" << std::endl;
+		return 1;
     }
 
-	int bf(node *n)//balance factor
+	int bf(node_type *n)//balance factor
 	{
 		if(n->left && n->right)
 			return n->left->height - n->right->height;
@@ -91,9 +139,83 @@ class avl_tree
 		return 0;
 	}
 
-	//****************find the node in the tree
+	//****************find the node_type in the tree
 
-	node *find_min(node *p)//find the node in the tree
+	node_type *find_next(T data)
+	{
+		return find_next(data, _root);
+	}
+
+	node_type *find_next(T data, node_type *p)//find the node_type in the tree
+	{
+		node_type *here;
+		if(exist(p, data))
+		{
+			here = search(p, data);
+			if(here->right)
+				return find_min(here->right);
+			else if(here->parent)
+			{
+				node_type *dad = here->parent;
+				if (dad->left == here)
+					return dad;
+				else if(dad->right == here)
+				{
+					while(dad && dad->right == here)
+					{
+						here = dad;
+						dad = here->parent;
+					}
+					return dad;
+				}
+			}
+		}
+		return NULL;
+	}
+
+	node_type *find_prev(T data)
+	{
+		return find_prev(data, _root);
+	}
+
+	node_type *find_prev(T data, node_type *p)//find the node_type in the tree
+	{
+		node_type *here;
+		if(exist(p, data))
+		{
+			here = search(p, data);
+			if(here->left)
+				return find_max(here->left);
+			else if(here->parent)
+			{
+				node_type *dad = here->parent;
+				if (dad->right == here)
+					return dad;
+				else if(dad->left == here)
+				{
+					while(dad && dad->left == here)
+					{
+						here = dad;
+						dad = here->parent;
+					}
+					return dad;
+				}
+			}
+		}
+		return NULL;
+	}
+
+	node_type *find_min()
+	{
+		return find_min(_root);
+	}
+
+	node_type *find_max()
+	{
+		return find_max(_root);
+	}
+
+	node_type *find_min(node_type *p)//find the node_type in the tree
 	{
 		if(p->left)
 			return find_min(p->left);
@@ -101,7 +223,7 @@ class avl_tree
 			return p;
 	}
 
-	node *find_max(node *p)//find the node in the tree
+	node_type *find_max(node_type *p)//find the node_type in the tree
 	{
 		if(p->right)
 			return find_max(p->right);
@@ -109,7 +231,7 @@ class avl_tree
 			return p;
 	}
 
-	bool exist(node* p, int data)//check if the data is in the tree
+	bool exist(node_type* p, T data)//check if the data is in the tree
 	{
 		if(p == NULL)
 			return false;
@@ -121,7 +243,7 @@ class avl_tree
 			return exist(p->right, data);
 	}
 
-	node* search(node* p, int data)//search the data in the tree
+	node_type* search(node_type* p, T data)//search the data in the tree
 	{
 		if(p == NULL)
 			return NULL;
@@ -134,35 +256,39 @@ class avl_tree
 	}
 
 	//*****************roatations
-	node* llrotation(node *n)
+	node_type* llrotation(node_type *n)
 	{
-        node *p;
-        node *tp;
+        node_type *p;
+        node_type *tp;
 
         p = n;
         tp = p->left;
         p->left = tp->right;
         tp->right = p;
+		p->height = calcul_height(p);
+		tp->height = calcul_height(tp);
         return (tp); 
     }
 
-	node* rrrotation(node *n)
+	node_type* rrrotation(node_type *n)
 	{
-		node *p;
-		node *tp;
+		node_type *p;
+		node_type *tp;
 
 		p = n;
 		tp = p->right;
 		p->right = tp->left;
 		tp->left = p;
+		p->height = calcul_height(p);
+		tp->height = calcul_height(tp);
 		return (tp); 
 	}
 
-	node* rlrotation(node *n)
+	node_type* rlrotation(node_type *n)
 	{
-		node *p;
-		node *tp;
-		node *tpp;
+		node_type *p;
+		node_type *tp;
+		node_type *tpp;
 
 		p = n;
 		tp = p->right;
@@ -171,16 +297,19 @@ class avl_tree
         tp->left = tpp->right;
         tpp->left = p;
         tpp->right = tp;
+		p->height = calcul_height(p);
+		tp->height = calcul_height(tp);
+		tpp->height = calcul_height(tpp);
 		return (tpp);
 		// p->right = llrotation(tp);
 		// return (rrrotation(p));
 	}
 
-	node* lrrotation(node *n)
+	node_type* lrrotation(node_type *n)
 	{
-		node *p;
-		node *tp;
-		node *tpp;
+		node_type *p;
+		node_type *tp;
+		node_type *tpp;
 
 		p = n;
 		tp = p->left;
@@ -189,35 +318,92 @@ class avl_tree
 		tp->right = tpp->left;
 		tpp->right = p;
 		tpp->left = tp;
+		p->height = calcul_height(p);
+		tp->height = calcul_height(tp);
+		tpp->height = calcul_height(tpp);
 		return (tpp);
 		// p->left = rrrotation(tp);
 		// return (llrotation(p));
 	}
 	//**********************modifiers for the tree
 
-	void clear(node* &p)//delete the tree
+	void clear()
+	{
+		
+		if(_root)
+			clear(_root);
+		_root = NULL;
+		_size = 0;
+	}
+	void clear(node_type* &p)//clear all the tree
 	{
 		if (p == NULL)
 			return;
-		// _alloc.destroy(&(p->data));
+		_alloc.destroy(&(p->data));
 		if(p->left)
 			clear(p->left);
 		if(p->right)
 			clear(p->right);
-		delete(p);// _alloc_node.deallocate(p, 1);
+		_alloc_node.deallocate(p, 1);
 		p = NULL;
+		_size = 0;
 	}
 
-	node* insert_(node *r,int data)
+	void find_parent(node_type *p)
 	{
+		if (p == NULL)
+			return;
+		if (p == _root)
+			p->parent = NULL;
+		if(p->left)
+		{
+			node_type *tmp = p->left;
+			tmp->parent = p;
+			find_parent(tmp);
+		}
+		if(p->right)
+		{
+			node_type *tmp = p->right;
+			tmp->parent = p;
+			find_parent(tmp);
+		}
+	}
+
+	int size() const
+	{
+		return this->_size;
+	}
+
+	bool empty() const
+	{
+		return (this->_size == 0);
+	}
+	
+	bool insert_(T data)
+	{
+		if (exist(_root, data))
+			return false;
+		this->_root = this->insert_(_root, data);
+		this->_size++;
+		find_parent(_root);
+		return true;
+	}
+
+	node_type* insert_(node_type *r,T data)
+	{
+		// if (r != NULL)
+		// 	std::cout << "inserting " << data << " in the tree" << r->data << std::endl;
 		if(r == NULL)
 		{
-			node *n;
-			n = new node;
-			n->data = data;
+			// std::cout << "inserting " << data << std::endl;
+			node_type *n;
+			// n = new node_type;
+			n = _alloc_node.allocate(1);
+			_alloc.construct(&(n->data), data);
+			// n->data = data;
 			r = n;
-			r->left = r->right = NULL;
-			r->height = 1; 
+			r->left = r->right = r->parent = NULL;
+			r->height = 1;
 			return r;             
 		}
 		else
@@ -231,7 +417,10 @@ class avl_tree
 		if(bf(r)==2 && bf(r->left)==1)
 			r = llrotation(r);
 		else if(bf(r)==-2 && bf(r->right)==-1)
+		{
+			// std::cout << "here here" << std::endl;
 			r = rrrotation(r);
+		}
 		else if(bf(r)==-2 && bf(r->right)==1)
 			r = rlrotation(r);
 		else if(bf(r)==2 && bf(r->left)==-1)
@@ -239,15 +428,26 @@ class avl_tree
 		return r;
 	}
 
-	node *min_node(node *node)
+	node_type *min_node(node_type *node)
 	{
-		// node *current = node;
+		// node_type *current = node_type;
 		while (node->left != NULL)
 			node = node->left;
 		return node;
 	}
 
-	node* delete_(node *p, int data)
+
+	bool delete_(T data)
+	{
+		if (!exist(_root, data))
+			return false;
+		_root = delete_(_root, data);
+		_size--;
+		find_parent(_root);
+		return true;
+	}
+
+	node_type* delete_(node_type *p, T data)
 	{
 		if(p == NULL)
 			return p;
@@ -259,7 +459,7 @@ class avl_tree
 		{
 			if(p->left == NULL || p->right == NULL)
 			{
-				node *temp;
+				node_type *temp;
 				if(p->left)
 					temp = p->left;
 				else
@@ -271,11 +471,12 @@ class avl_tree
 				}
 				else
 					*p = *temp;
-				delete(temp);
+				_alloc.destroy(&(temp->data));
+				_alloc_node.deallocate(temp, 1);
 			}
 			else
 			{
-				node *temp;
+				node_type *temp;
 				temp = min_node(p->right);
 				p->data = temp->data;
 				p->right = delete_(p->right,temp->data);
@@ -301,8 +502,14 @@ class avl_tree
     }
 
 	//************display the tree in the following format:
-	void print_tree(node *r)
+	void print_tree()
 	{
+		print_tree(_root);
+		// std::cout << _size << std::endl;
+    }
+	void print_tree(node_type *r)
+	{
+		// std::cout << _size << std::endl;
 		if (r == NULL)
 		{
 			std::cout << "Empty tree"<<std::endl;
@@ -310,8 +517,8 @@ class avl_tree
 		}
 		print_tree(r, "", true);
     }
-	
-    void print_tree(node *root, std::string indent, bool last)
+
+    void print_tree(node_type *root, std::string indent, bool last)
 	{
         if (root != nullptr)
         {
@@ -326,7 +533,16 @@ class avl_tree
 				std::cout << "L----";
 				indent += "|  ";
 			}
-			std::cout << root->data << std::endl;
+			std::cout << root->data ;//<<"::"<< root->height;
+			// if (root->parent == NULL)
+			// 	std::cout << " root";
+			// else
+			// 	std::cout << " parent->" << root->parent->data;
+			// if (root->left != NULL)
+			// 	std::cout << " my left is " << root->left->data;
+			// if (root->right != NULL)
+			// 	std::cout << " my right is " << root->right->data;
+			std::cout << std::endl;
 			print_tree(root->left, indent, false);
 			print_tree(root->right, indent, true);
         }
@@ -334,71 +550,60 @@ class avl_tree
     
 };
 
-int main() {
-	avl_tree root;
-	root._root = root.insert_(root._root, 33);
-	root._root = root.insert_(root._root, 13);
-	root._root = root.insert_(root._root, 53);
-	root._root = root.insert_(root._root, 9);
-	root._root = root.insert_(root._root, 21);
-	root._root = root.insert_(root._root, 61);
-	root._root = root.insert_(root._root, 8);
-	root._root = root.insert_(root._root, 11);
-	root.print_tree(root._root);
+int main()
+{
+	avl_tree<int, int> root;
+	root.insert_(10);
+	root.insert_(20);
+	root.insert_(30);
+	root.insert_(40);
+	root.insert_(50);
+	root.insert_(60);
+	root.insert_(70);
+	root.insert_(80);
+	root.insert_(90);
+	std::cout << "size: " << root.size() << std::endl;
+	avl_tree<int, int> root2;
+	root2 = root;
+	// std::cout << "next of 10 is :"<< root.find_next(10)->data << std::endl;
+	// if (root.find_prev(10) == NULL)
+	// 	std::cout << "next of 90 is : NULL" << std::endl;
+	// else
+	// 	std::cout << "next of 10 is :"<< root.find_next(90)->data << "prev of 10 is :"<< root.find_prev(10)->data  << std::endl;;
+	// std::cout << "next of 20 is :"<< root.find_next(20)->data << "prev of 20 is :"<< root.find_prev(20)->data  << std::endl;
+	// std::cout << "next of 30 is :"<< root.find_next(30)->data << "prev of 30 is :"<< root.find_prev(30)->data  << std::endl;
+	// std::cout << "next of 40 is :"<< root.find_next(40)->data << "prev of 40 is :"<< root.find_prev(40)->data  << std::endl;
+	// std::cout << "next of 50 is :"<< root.find_next(50)->data << "prev of 50 is :"<< root.find_prev(50)->data  << std::endl;
+	// std::cout << "next of 70 is :"<< root.find_next(70)->data << "prev of 70 is :"<< root.find_prev(70)->data  << std::endl;
+	// std::cout << "next of 60 is :"<< root.find_next(60)->data << "prev of 60 is :"<< root.find_prev(60)->data  << std::endl;
+	// std::cout << "next of 80 is :"<< root.find_next(80)->data << "prev of 80 is :"<< root.find_prev(80)->data  << std::endl;
+	// if (root.find_next(90) == NULL)
+	// 	std::cout << "next of 90 is : NULL" << std::endl;
+	// else
+	// 	std::cout << "next of 90 is :"<< root.find_next(90)->data << std::endl;
+	// std::cout << "min value" << root.find_min()->data << std::endl;
+	// std::cout << "max value" << root.find_max()->data << std::endl;
+	root2.print_tree();
 	// if (root.exist(root._root, 13))
 	// 	std::cout << "13 Found" << std::endl;
 	// else
 	// 	std::cout << "13 Not found" << std::endl;
-	root._root = root.delete_(root._root, 13);
+	// root._root = root.delete_(root._root, 60);
+	root.delete_(60);
+	// std::cout << "next of 50 is :"<< root.find_next(50)->data << "prev of 50 is :"<< root.find_prev(50)->data  << std::endl;
+	// root._root = root.delete_(root._root, 13);
+	// root._root = root.delete_(13);
 	std::cout << "After deleting " << std::endl;
 	// if (root.exist(root._root, 13))
 	// 	std::cout << "13 Found" << std::endl;
 	// else
 	// 	std::cout << "13 Not found" << std::endl;
-	root.print_tree(root._root);
-	std::cout << "After deleting all" << std::endl;
-	root.clear(root._root);
-	root.print_tree(root._root);
+	// root.print_tree(root._root);
+	root2.print_tree();
+	// std::cout << "After deleting all" << std::endl;
+	// root.clear();
+	// root.print_tree(root._root);
+	// system("leaks a.out");
+	// root.print_tree();
 
 }
-
-// int main(){
-
-//     AVL b;
-//     int c,x;
-
-//     do{
-//         cout<<"\n1.Display levelorder on newline";
-//         cout<<"\n2.insert_";
-//         cout<<"\n3.Delete\n";
-//         cout<<"\n0.Exit\n";
-//         cout<<"\nChoice: ";
-
-//         cin>>c;
-
-//         switch (c)
-//         {
-//         case 1:
-//             b.levelorder_newline();
-//             // to print the tree in level order
-//             break;
-                  
-//         case 2:
-//             cout<<"\nEnter no. ";
-//             cin>>x;
-//             b.root = b.insert_(b.root,x);
-//             break;
-        
-//         case 3:
-//             cout<<"\nWhat to delete? ";
-//             cin>>x;
-//             b.root = b.deleteNode(b.root,x);
-//             break;
-            
-//         case 0:
-//             break;
-//         }
-
-//      } while(c!=0);
-  
-// }

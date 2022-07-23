@@ -111,7 +111,7 @@ public:
         node *tp2;
         p = n;
         tp = p->left;
-        tp2 =p->left->right;
+        tp2 = p->left->right;
 
         p -> left = tp2->right;
         tp ->right = tp2->left;
@@ -311,14 +311,15 @@ public:
 
  int main() {
   AVL root;
-  root.root = root.insert(root.root, 33);
-  root.root = root.insert(root.root, 13);
-  root.root = root.insert(root.root, 53);
-  root.root = root.insert(root.root, 9);
-  root.root = root.insert(root.root, 21);
-  root.root = root.insert(root.root, 61);
-  root.root = root.insert(root.root, 8);
-  root.root = root.insert(root.root, 11);
+  root.root = root.insert(root.root, 10);
+  root.root = root.insert(root.root, 20);
+  root.root = root.insert(root.root, 30);
+  root.root = root.insert(root.root, 40);
+  root.root = root.insert(root.root, 50);
+  root.root = root.insert(root.root, 60);
+//   root.root = root.insert(root.root, 70);
+//   root.root = root.insert(root.root, 8);
+//   root.root = root.insert(root.root, 11);
 //   levelorder_newline();
 root.print_tree(root.root);
   root.root = root.deleteNode(root.root, 13);
