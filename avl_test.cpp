@@ -588,21 +588,21 @@ int main()
 	// ft::avl_tree<int, int> root2;
 	// root2 = root;
 	// std::cout << "next of 10 is :"<< root.find_next(10)->data << std::endl;
-	if (root.find_prev(10) == NULL)
-		std::cout << "next of 10 is : NULL" << std::endl;
-	else
-		std::cout << "next of 10 is :"<< root.find_next(10)->data.first << " prev of 10 is :"<< root.find_prev(10)->data.first  << std::endl;;
-	std::cout << "next of 20 is :"<< root.find_next(20)->data.first << " prev of 20 is :"<< root.find_prev(20)->data.first  << std::endl;
-	std::cout << "next of 30 is :"<< root.find_next(30)->data.first << " prev of 30 is :"<< root.find_prev(30)->data.first  << std::endl;
-	std::cout << "next of 40 is :"<< root.find_next(40)->data.first << " prev of 40 is :"<< root.find_prev(40)->data.first  << std::endl;
-	std::cout << "next of 50 is :"<< root.find_next(50)->data.first << " prev of 50 is :"<< root.find_prev(50)->data.first  << std::endl;
-	std::cout << "next of 60 is :"<< root.find_next(60)->data.first << " prev of 60 is :"<< root.find_prev(60)->data.first  << std::endl;
-	std::cout << "next of 70 is :"<< root.find_next(70)->data.first << " prev of 70 is :"<< root.find_prev(70)->data.first  << std::endl;
-	std::cout << "next of 80 is :"<< root.find_next(80)->data.first << " prev of 80 is :"<< root.find_prev(80)->data.first  << std::endl;
-	if (root.find_next(90) == NULL)
-		std::cout << "next of 90 is : NULL" << std::endl;
-	else
-		std::cout << "next of 90 is :"<< root.find_next(90)->data.first << std::endl;
+	// if (root.find_prev(10) == NULL)
+	// 	std::cout << "next of 10 is : NULL" << std::endl;
+	// else
+	// 	std::cout << "next of 10 is :"<< root.find_next(10)->data.first << " prev of 10 is :"<< root.find_prev(10)->data.first  << std::endl;;
+	// std::cout << "next of 20 is :"<< root.find_next(20)->data.first << " prev of 20 is :"<< root.find_prev(20)->data.first  << std::endl;
+	// std::cout << "next of 30 is :"<< root.find_next(30)->data.first << " prev of 30 is :"<< root.find_prev(30)->data.first  << std::endl;
+	// std::cout << "next of 40 is :"<< root.find_next(40)->data.first << " prev of 40 is :"<< root.find_prev(40)->data.first  << std::endl;
+	// std::cout << "next of 50 is :"<< root.find_next(50)->data.first << " prev of 50 is :"<< root.find_prev(50)->data.first  << std::endl;
+	// std::cout << "next of 60 is :"<< root.find_next(60)->data.first << " prev of 60 is :"<< root.find_prev(60)->data.first  << std::endl;
+	// std::cout << "next of 70 is :"<< root.find_next(70)->data.first << " prev of 70 is :"<< root.find_prev(70)->data.first  << std::endl;
+	// std::cout << "next of 80 is :"<< root.find_next(80)->data.first << " prev of 80 is :"<< root.find_prev(80)->data.first  << std::endl;
+	// if (root.find_next(90) == NULL)
+	// 	std::cout << "next of 90 is : NULL" << std::endl;
+	// else
+	// 	std::cout << "next of 90 is :"<< root.find_next(90)->data.first << std::endl;
 	// std::cout << "min value" << root.find_min()->data << std::endl;
 	// std::cout << "max value" << root.find_max()->data << std::endl;
 	root.print_tree();
@@ -612,24 +612,33 @@ int main()
 	// 	std::cout << "13 Not found" << std::endl;
 	// root._root = root.delete_(root._root, 60);
 	// root.delete_(60);
-	// root.delete_(10);
-	// root.delete_(20);
-	// root.delete_(30);
 	// std::cout << "next of 50 is :"<< root.find_next(50)->data << "prev of 50 is :"<< root.find_prev(50)->data  << std::endl;
 	// root._root = root.delete_(root._root, 13);
 	// root._root = root.delete_(13);
 	std::cout << "After deleting " << std::endl;
-	root.delete_(1);
+	root.delete_(10);
+	// root.print_tree();
+	// std::cout << "After deleting " << std::endl;
+	root.delete_(20);
+	root.delete_(30);
+	root.delete_(40);
+	root.delete_(50);
+	root.delete_(60);
+	root.delete_(70);
+	root.delete_(80);
+	root.delete_(90);
+	root.print_tree();
+	// root.delete_(1);
 	// if (root.exist(root._root, 13))
 	// 	std::cout << "13 Found" << std::endl;
 	// else
 	// 	std::cout << "13 Not found" << std::endl;
 	// root.print_tree(root._root);
-	root.print_tree();
+	// root.print_tree();
 	// std::cout << "After deleting all" << std::endl;
-	root.clear();
+	// root.clear();
 	// root.print_tree(root._root);
-	system("leaks a.out");
+	// system("leaks a.out");
 	// root.print_tree();
 
 }

@@ -2,10 +2,6 @@
 #define AVL_TREE_HPP
 
 #include <iostream>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <algorithm>
 #include "../utilities/utilities.hpp"
 
 namespace ft
@@ -82,7 +78,7 @@ namespace ft
         {
             *this = other;
         }
-        ~avl_tree() {clear(_root);};
+        ~avl_tree() {};
 
         avl_tree &operator=(const avl_tree& rhs) 
         {
@@ -153,6 +149,12 @@ namespace ft
             return find_next(data, _root);
         }
 
+        node_type *find_next(node_type *data)
+        {
+            find_parent(_root);
+            return find_next(data->data.first, _root);
+        }
+
         node_type *find_next(key_type data, node_type *p)//find the node_type in the tree
         {
             node_type *here;
@@ -185,6 +187,12 @@ namespace ft
         {
             find_parent(_root);
             return find_prev(data, _root);
+        }
+
+        node_type *find_prev(node_type *data)
+        {
+            find_parent(_root);
+            return find_prev(data->data.first, _root);
         }
 
         node_type *find_prev(key_type data, node_type *p)//find the node_type in the tree
@@ -481,10 +489,10 @@ namespace ft
             int cmp = _compare(data, p->data.first);
             // if(p->data < data)
             if(cmp)
-                p->right = delete_(p->left,data);
+                p->left = delete_(p->left,data);
             // else if(p->data > data)
-            else if(!cmp && p->right && p->data.first != data)
-                p->left = delete_(p->right,data);
+            else if(cmp == false && p->right && p->data.first != data)
+                p->right = delete_(p->right,data);
             else
             {
                 if(p->left == NULL || p->right == NULL)
