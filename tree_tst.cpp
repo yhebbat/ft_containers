@@ -1,389 +1,424 @@
 // #include <iostream>
-// #include <queue>
-// #include <unordered_map>
-// using namespace std;
+// #include <functional>
+// #include <memory>
+// #include <stdexcept>
+// #include <algorithm>
+// #include "./utilities/utilities.hpp"
 
-// class node {
+// namespace ft{
 
-//     public:
-//         node *left;
-//         int data;
-//         int height;
-//         node *right;
-//         node(int data) {
-//             this->data = data;
-//             this->left = NULL;
-//             this->right = NULL;
-//             this->height = 0;
-//         }
-//         node() {
-//             this->left = NULL;
-//             this->right = NULL;
-//             this->height = 0;
-//         }
-// };
-
-// class AVL
-// {
-// private:
-    
-// public:
-//     node * root;
-//     AVL(){
-//         this->root = NULL;
-
-//     }
-
-//     int calheight(node *p){
-
-//             if(p->left && p->right){
-//             if (p->left->height < p->right->height)
-//                 return p->right->height + 1;
-//             else return  p->left->height + 1;
-//             }
-//             else if(p->left && p->right == NULL){
-//                return p->left->height + 1;
-//             }
-//             else if(p->left ==NULL && p->right){
-//                return p->right->height + 1;
-//             }
-//             return 0;
-
-//     }
-
-//     int bf(node *n){
-//             if(n->left && n->right){
-//                 return n->left->height - n->right->height; 
-//             }
-//             else if(n->left && n->right == NULL){
-//                 return n->left->height; 
-//             }
-//             else if(n->left== NULL && n->right ){
-//                 return -n->right->height;
-//             }
-//     }
-
-//     node * llrotation(node *n){
-//         node *p;
-//         node *tp;
-//         p = n;
-//         tp = p->left;
-
-//         p->left = tp->right;
-//         tp->right = p;
-
-//         return tp; 
-//     }
-
-
-//     node * rrrotation(node *n){
-//         node *p;
-//         node *tp;
-//         p = n;
-//         tp = p->right;
-
-//         p->right = tp->left;
-//         tp->left = p;
-
-//         return tp; 
-//     }
-
-
-//     node * rlrotation(node *n){
-//         node *p;
-//         node *tp;
-//         node *tp2;
-//         p = n;
-//         tp = p->right;
-//         tp2 =p->right->left;
-
-//         p -> right = tp2->left;
-//         tp ->left = tp2->right;
-//         tp2 ->left = p;
-//         tp2->right = tp; 
-        
-//         return tp2; 
-//     }
-
-//     node * lrrotation(node *n){
-//         node *p;
-//         node *tp;
-//         node *tp2;
-//         p = n;
-//         tp = p->left;
-//         tp2 = p->left->right;
-
-//         p -> left = tp2->right;
-//         tp ->right = tp2->left;
-//         tp2 ->right = p;
-//         tp2->left = tp; 
-        
-//         return tp2; 
-//     }
-
-//     node* insert(node *r,int data){
-        
-//         if(r==NULL){
-//             node *n;
-//             n = new node;
-//             n->data = data;
-//             r = n;
-//             r->left = r->right = NULL;
-//             r->height = 1; 
-//             return r;             
-//         }
-//         else{
-//             if(data < r->data)
-//             r->left = insert(r->left,data);
-//             else
-//             r->right = insert(r->right,data);
-//         }
-
-//         r->height = calheight(r);
-
-//         if(bf(r)==2 && bf(r->left)==1){
-//             r = llrotation(r);
-//         }
-//         else if(bf(r)==-2 && bf(r->right)==-1){
-//             r = rrrotation(r);
-//         }
-//         else if(bf(r)==-2 && bf(r->right)==1){
-//             r = rlrotation(r);
-//         }
-//         else if(bf(r)==2 && bf(r->left)==-1){
-//             r = lrrotation(r);
-//         }        
-
-//         return r;
-
-//         }
-
-//     void levelorder_newline(){
-//         if (this->root == NULL){
-//             cout<<"\n"<<"Empty tree"<<"\n";
-//             return;            
-//         }
-//         levelorder_newline(this->root);
-//     }
-
-//     void levelorder_newline(node *v){
-//         queue <node *> q;
-//         node *cur;
-//         q.push(v);
-//         q.push(NULL);      
-
-//         while(!q.empty()){
-//             cur = q.front();
-//             q.pop();
-//             if(cur == NULL && q.size()!=0){
-//                 cout<<"\n";
-                
-//                 q.push(NULL);
-//                 continue;
-//             }
-//             if(cur!=NULL){
-//                 cout<<" "<<cur->data;
-
-//                 if (cur->left!=NULL){
-//                 q.push(cur->left);
-//                 }
-//                 if (cur->right!=NULL){
-//                     q.push(cur->right);
-//                 }
-//             }
-            
-            
-//         }
-//     }
- 
-//     node *min_node(node *node)
+// 	template <typename T>
+// 	struct node
 // 	{
-//         while(node->left!=NULL)
-//             node = node->left;
-//         return node;
-// 		// node *current = node;
-// 		// while (current->left != NULL)
-// 		// 	current = current->left;
-// 		// return current;
-// 	}
+// 		T		data; //? pair<U, V>
+// 		int		bf;
+// 		int		height;
+// 		node*	parent_node;
+// 		node*	left_node;
+// 		node*	right_node;
 
-// 	node* deleteNode(node *p, int data)
-// 	{
-// 		if(p == NULL)
-// 			return p;
-//         if(p->data < data)
-//             p->right = deleteNode(p->right,data);
-//         else if(p->data > data)
-//             p->left = deleteNode(p->left,data);
-//         else
-// 		{
-// 			if(p->left == NULL || p->right == NULL)
-// 			{
-// 				node *temp;
-// 				if(p->left)
-// 					temp = p->left;
-// 				else
-// 					temp = p->right;
-// 				if(temp == NULL)
-// 				{
-// 					temp = p;
-// 					p = NULL;
-// 				}
-// 				else
-// 					*p = *temp;
-// 				delete(temp);
-// 			}
-// 			else
-// 			{
-// 				node *temp;
-// 				temp = min_node(p->right);
-// 				p->data = temp->data;
-// 				p->right = deleteNode(p->right,temp->data);
-// 			}
-//         }
-// 		if(p == NULL)
-// 			return p;
-// 		p->height = calheight(p);
-
-//         if(bf(p)==2 && bf(p->left)==1)
-// 			p = llrotation(p);                  
-//         else if(bf(p)==2 && bf(p->left)==-1)
-// 			p = lrrotation(p);
-//         else if(bf(p)==2 && bf(p->left)==0)
-// 			p = llrotation(p);
-//         else if(bf(p)==-2 && bf(p->right)==-1)
-// 			p = rrrotation(p);
-//         else if(bf(p)==-2 && bf(p->right)==1)
-// 			p = rlrotation(p);
-//         else if(bf(p)==-2 && bf(p->right)==0)
-// 			p = llrotation(p);
-//         return p;
-//     }
-
-//      node* inpre(node* p){
-//         while(p->right!=NULL)
-//             p = p->right;
-//         return p;    
-//     }
-
-//     node* insuc(node* p){
-//         while(p->left!=NULL)
-//             p = p->left;
-
-//         return p;    
-//     }
-
-//     void print_tree(node *r)
-// 	{
-// 		if (r == NULL)
-// 		{
-// 			std::cout << "Empty tree"<<std::endl;
-// 			return;
+// 		node(void): T(), bf(0), height(0), parent_node(NULL), left_node(NULL), right_node(NULL){}
+// 		~node(void){}
+// 		bool operator== (const node& rhs) const{
+// 			return (data == rhs.data && bf == rhs.bf && height == rhs.height
+// 				&& left_node == rhs.left_node && right_node == rhs.right_node
+// 					&& parent_node == rhs.parent_node);
 // 		}
-// 		print_tree(r, "", true);
-//     }
 
-//     void print_tree(node *root, string indent, bool last)
-// 	{
-//         if (root != nullptr)
-//         {
-//         	std::cout << indent;
-// 			if (last)
-// 			{
-// 				std::cout << "R----";
-// 				indent += "   ";
+// 	};
+
+// 	template <typename T, typename Compare = std::less<typename T::first_type>,
+// 		typename Alloc = std::allocator <T> >
+// 	class avltree{
+
+// 		public:
+
+// 			typedef node<T>					node_type;
+// 			typedef typename T::first_type	key_type;
+// 			typedef typename T::second_type	mapped_value;
+// 			typedef typename Alloc::template rebind<node_type>::other Alloc_node;
+
+// 			avltree(void):  _root(NULL), _nbr_node(0){}
+// 			~avltree(void){ clear(); }
+// 			avltree& operator=(const avltree& t){
+
+// 				_comp = t._comp;
+// 				_alloc = t._alloc;
+// 				_alloc_node = t._alloc_node;
+// 				insert_nodes(t._root);
+// 				return (*this);
 // 			}
-// 			else
-// 			{
-// 				std::cout << "L----";
-// 				indent += "|  ";
+
+// 			void insert_nodes(node_type* x){
+
+// 				if (x != NULL){
+// 					insert(x->data);
+// 					if (x->left_node != NULL)
+// 						insert_nodes(x->left_node);
+// 					if (x->right_node != NULL)
+// 						insert_nodes(x->right_node);
+// 				}
 // 			}
-// 			std::cout << root->data << endl;
-// 			print_tree(root->left, indent, false);
-// 			print_tree(root->right, indent, true);
-//         }
-//     }
 
-//     ~AVL(){
+// 			//* Capacity ************************************************** //
 
-//     }
-// };
+// 			//? The height of a rooted tree is the number of edges between the tree's root and its furthest leaf
+// 			int height(void){
+// 				if (_root == NULL)
+// 					return (0);
+// 				return (_root->height);
+// 			}
 
-//  int main() {
-//   AVL root;
-//   root.root = root.insert(root.root, 10);
-//   root.root = root.insert(root.root, 20);
-//   root.root = root.insert(root.root, 30);
-//   root.root = root.insert(root.root, 40);
-//   root.root = root.insert(root.root, 50);
-//   root.root = root.insert(root.root, 60);
-// //   root.root = root.insert(root.root, 70);
-// //   root.root = root.insert(root.root, 8);
-// //   root.root = root.insert(root.root, 11);
-// //   levelorder_newline();
-// root.print_tree(root.root);
-//   root.root = root.deleteNode(root.root, 13);
-//   cout << "After deleting " << endl;
-// //   levelorder_newline();
-// root.print_tree(root.root);
-//   return 0;
+// 			//? the number of nodes in the tree
+// 			int size(void) const { return (_nbr_node); }
+
+// 			bool is_empty(void) const { return (_nbr_node == 0); }
+
+// 			//* Operations ************************************************* //
+
+// 			bool exist(T value) const {
+// 				return exist(_root, value);
+// 			}
+
+// 			bool exist(key_type key) const {
+// 				return exist(_root, key);
+// 			}
+
+// 			T min(node_type *root)const {
+
+// 				while (root->left_node != NULL)
+// 					root = root->left_node;
+// 				return (root->data);
+// 			}
+
+// 			T max(node_type *root)const {
+
+// 				while (root->right_node != NULL)
+// 					root = root->right_node;
+// 				return (root->data);
+// 			}
+
+// 			mapped_value* search(key_type& key){
+// 				return search(_root, key);
+// 			}
+
+// 			node_type* find_node(T p) const {
+// 				return find_node(_root, p.first);
+// 			}
+
+// 			node_type* find_node(key_type key) const {
+// 				return find_node(_root, key);
+// 			}
+
+// 			//* Modifiers ************************************************* //
+
+// 			node_type* insert(T data){
+
+// 				if (!exist(_root, data)){
+// 					_root = insert(_root, data);
+// 					_nbr_node += 1;
+// 					return (_root);
+// 				}
+// 				return (NULL);
+// 			}
+
+// 			int remove_(key_type key){
+
+// 				if (exist(_root, key)){
+// 					_root = remove_(_root, key);
+// 					_nbr_node -= 1;
+// 					return (1);
+// 				}
+// 				return (0);
+// 			}
+
+// 			void clear(void){
+
+// 				clear(_root);
+// 				_nbr_node = 0;
+// 			}
+
+// 			//* Print Content ************************************************* //
+
+// 			void display(const node_type* n){
+// 				display("", n, false);
+// 			}
+
+// 			void print_parent(node_type* n){
+
+// 				if(n->left_node != NULL)
+// 					print_parent(n->left_node);
+// 				if(n->right_node != NULL)
+// 					print_parent(n->right_node);
+// 				if(n->parent_node != NULL)
+// 					std::cout << "Parent of " << n->data.first << " is " << n->parent_node->data.first << std::endl;
+// 				else
+// 					std::cout << "The root node is " << n->data.first << std::endl;
+// 			}
+
+// 		private:
+
+// 			//* Operations ************************************************* //
+
+// 			node_type* find_node(node_type *root, key_type key) const {
+
+// 				if (root == NULL)
+// 					return (NULL);
+// 				if (root->data.first == key)
+// 					return (root);
+// 				int diff = _comp(root->data.first, key);
+// 				if (diff == false)
+// 					return find_node(root->left_node, key);
+// 				else
+// 					return find_node(root->right_node, key);
+// 			}
+
+// 			mapped_value* search (node_type *root, key_type& key){
+
+// 				if (root == NULL)
+// 					return (0);
+// 				if (root->data.first == key)
+// 					return (&(root->data.second));
+// 				int diff = _comp(root->data.first, key);
+// 				if (diff == false)
+// 					return search(root->left_node, key);
+// 				else
+// 					return search(root->right_node, key);
+// 			}
+
+// 			bool exist(node_type *n, T data) const {
+
+// 				if (n == NULL)
+// 					return (false);
+// 				if (n->data.first == data.first)
+// 					return (true);
+// 				int diff = _comp(data.first, n->data.first);
+// 				if (diff == true)
+// 					return exist(n->left_node, data);
+// 				if (diff == false)
+// 					return exist(n->right_node, data);
+// 				return (true);
+// 			}
+
+// 			bool exist(node_type *n, key_type key) const {
+
+// 				if (n == NULL)
+// 					return (false);
+// 				if (n->data.first == key)
+// 					return (true);
+// 				int diff = _comp(key, n->data.first);
+// 				if (diff == true)
+// 					return exist(n->left_node, key);
+// 				if (diff == false)
+// 					return exist(n->right_node, key);
+// 				return (true);
+// 			}
+
+// 			//* Modifiers ************************************************* //
+
+// 			node_type* insert(node_type *n, T data){
+
+// 				if (n == NULL){
+// 					_root = _alloc_node.allocate(1);
+// 					_alloc.construct(&_root->data, data);
+// 					_root->height = _root->bf = 0;
+// 					_root->left_node = _root->right_node = _root->parent_node = NULL;
+// 					return (_root);
+// 				}
+// 				int diff = _comp(data.first, n->data.first);
+// 				if (diff == true){
+// 					node_type* lnode = insert(n->left_node, data);
+// 					n->left_node = lnode;
+// 					lnode->parent_node = n;
+// 				}
+// 				else{
+// 					node_type* rnode = insert(n->right_node, data);
+// 					n->right_node = rnode;
+// 					rnode->parent_node = n;
+// 				}
+// 				update(n);	// Update balance factor and height values
+// 				return balance(n);
+// 			}
+
+// 			node_type* remove_(node_type *n, key_type key){
+
+// 				if (n == NULL)
+// 					return (NULL);
+// 				int diff = _comp(key, n->data.first);
+// 				if (diff == true)
+// 					n->left_node = remove_(n->left_node, key);
+// 				else if (diff == false && n->right_node != NULL && n->data.first != key)
+// 					n->right_node = remove_(n->right_node, key);
+// 				else{
+// 					if ((n->left_node != NULL && n->right_node == NULL) ||
+// 							(n->left_node == NULL && n->right_node != NULL)){
+// 						//? one child (left or right)
+// 						node_type *tmp = (n->left_node != NULL) ? n->left_node : n->right_node;
+// 						_root = tmp;
+// 						_root->parent_node = n->parent_node;
+// 						tmp = NULL;
+// 						_alloc.destroy(&(n->data));
+// 						_alloc_node.deallocate(n, 1);
+// 						n = NULL;
+// 						return (_root);
+// 					}
+// 					//* The successor is either the smallest value in the right subtree
+// 					//* or the largest value in the left subtree.
+// 					//? choose the successor from the subtree with the greatest height (~ tree balanced)
+// 					else if (n->left_node != NULL && n->right_node != NULL){
+// 						node_type *parent = n->parent_node;
+// 						if (n->left_node->height >= n->right_node->height){
+// 							T successor = max(n->left_node);
+// 							_alloc.construct(&n->data, successor);
+// 							n->parent_node = parent;
+// 							n->left_node = remove_(n->left_node, successor.first);
+// 						}
+// 						else{
+// 							T successor = min(n->right_node);
+// 							_alloc.construct(&n->data, successor);
+// 							n->parent_node = parent;
+// 							n->right_node = remove_(n->right_node, successor.first);
+// 						}
+// 					}
+// 					else{ //? n->left_node == NULL && n->right_node == NULL -> leaf
+// 						_alloc.destroy(&(n->data));
+// 						_alloc_node.deallocate(n, 1);
+// 						n = NULL;
+// 						return (NULL);
+// 					}
+// 				}
+// 				update(n);
+// 				return (balance(n));
+// 			}
+
+// 			void clear(node_type* &n){
+
+// 				if (n != NULL){
+// 					_alloc.destroy(&(n->data));
+// 					if (n->left_node != NULL)
+// 						clear(n->left_node);
+// 					if (n->right_node != NULL)
+// 						clear(n->right_node);
+// 					_alloc_node.deallocate(n, 1);
+// 				}
+// 				n = NULL;
+// 			}
+
+// 			//* Rotations ************************************************* //
+
+// 			void update(node_type *n){
+
+// 				int left_height, right_height;
+
+// 				left_height = (n->left_node == NULL) ? -1 : n->left_node->height;
+// 				right_height = (n->right_node == NULL) ? -1 : n->right_node->height;
+// 				n->height = std::max(right_height, left_height) + 1;
+// 				n->bf = right_height - left_height;
+// 			}
+
+// 			node_type *balance(node_type *n){
+
+// 				//? left heavy subtree
+// 				if (n->bf == -2){
+// 					// left_left case
+// 					if (n->left_node->bf <= 0)
+// 						return leftleft_case(n);
+// 					// left_right case
+// 					else
+// 						return leftright_case(n);
+// 				}
+// 				//? right heavy subtree
+// 				else if (n->bf == 2){
+// 					// right_right case
+// 					if (n->right_node->bf >= 0)
+// 						return rightright_case(n);
+// 					// right_left case
+// 					else
+// 						return rightleft_case(n);
+// 				}
+// 				// we return node without any rotation if |bf| <= 1
+// 				return (n);
+// 			}
+
+// 			node_type* leftleft_case(node_type* n){
+// 				return right_rotation(n);				
+// 			}
+
+// 			node_type* rightright_case(node_type* n){
+// 				return left_rotation(n);
+// 			}
+
+// 			node_type* leftright_case(node_type* n){
+// 				n->left_node = left_rotation(n->left_node);
+// 				return (right_rotation(n));
+// 			}
+
+// 			node_type* rightleft_case(node_type* n){
+// 				n->right_node = right_rotation(n->right_node);
+// 				return (left_rotation(n));
+// 			}
+
+// 			node_type* right_rotation(node_type* n){
+
+// 				node_type *new_parent = n->left_node;
+// 				n->left_node = new_parent->right_node;
+// 				new_parent->right_node = n;
+// 				//? update parent
+// 				new_parent->parent_node = n->parent_node;
+// 				n->parent_node = new_parent;
+// 				if (n->left_node != NULL)
+// 					n->left_node->parent_node = new_parent->right_node;
+// 				update(n);
+// 				update(new_parent);
+// 				return (new_parent);
+// 			}
+
+// 			node_type* left_rotation(node_type* n){
+
+// 				node_type *new_parent = n->right_node;
+// 				n->right_node = new_parent->left_node;
+// 				new_parent->left_node = n;
+// 				//? update parent
+// 				new_parent->parent_node = n->parent_node;
+// 				n->parent_node = new_parent;
+// 				if (n->right_node != NULL)
+// 					n->right_node->parent_node = new_parent->left_node;
+// 				update(n);
+// 				update(new_parent);
+// 				return (new_parent);
+// 			}
+
+// 			//* Print Tree ************************************************* //
+
+// 			void display(const std::string& prefix, const node_type* n, bool is_left){
+
+// 				if (n != NULL){
+// 					std::cout << prefix;
+// 					std::cout << (is_left ? "├L──" : "└R──");
+// 					//? print the value of the node
+// 					std::cout << n->data.first <<  "||"<< n->data.second << std::endl;
+// 					//? next level tree left & right branch
+// 					display(prefix + (is_left ? "|	" : "	"), n->left_node, true);
+// 					display(prefix + (is_left ? "|	" : "	"), n->right_node, false);
+// 				}
+// 			}
+
+// 			Compare     _comp;
+// 			Alloc_node  _alloc_node;
+// 			Alloc       _alloc;
+
+// 		public:
+// 			node_type   *_root;
+// 			int         _nbr_node;
+
+// 	};
 // }
 
-// // int main(){
-
-// //     AVL b;
-// //     int c,x;
-
-// //     do{
-// //         cout<<"\n1.Display levelorder on newline";
-// //         cout<<"\n2.Insert";
-// //         cout<<"\n3.Delete\n";
-// //         cout<<"\n0.Exit\n";
-// //         cout<<"\nChoice: ";
-
-// //         cin>>c;
-
-// //         switch (c)
-// //         {
-// //         case 1:
-// //             b.levelorder_newline();
-// //             // to print the tree in level order
-// //             break;
-                  
-// //         case 2:
-// //             cout<<"\nEnter no. ";
-// //             cin>>x;
-// //             b.root = b.insert(b.root,x);
-// //             break;
-        
-// //         case 3:
-// //             cout<<"\nWhat to delete? ";
-// //             cin>>x;
-// //             b.root = b.deleteNode(b.root,x);
-// //             break;
-            
-// //         case 0:
-// //             break;
-// //         }
-
-// //      } while(c!=0);
-  
-// // }
-
-#include <iostream>
-#include <cstdlib>
-#include "./map/avl_tree.hpp"
-#include "./iterators/bidirectional_iterator.hpp"
-
-int main()
-{
-    ft::avl_tree<ft::pair<int, int> > tree;
-    // ft::iterator<ft::bidirectional_iterator<ft::pair<int, int> >> it;
-    
-    tree.insert_(ft::pair<int, int>(1, 1));
-    tree.insert_(ft::pair<int, int>(2, 2));
-    tree.insert_(ft::pair<int, int>(3, 3));
-    tree.insert_(ft::pair<int, int>(4, 4));
-    tree.insert_(ft::pair<int, int>(5, 5));
-    // std::cout << it.begin() << std::endl;
-}
+// int main()
+// {
+// 	ft::avltree<ft::pair<int,int> > root;
+// 	// ft::avl_tree<int> root;
+// 	root.insert(ft::make_pair(10,1));
+// 	root.insert(ft::make_pair(10,2));
+//     root.display(root._root);
+// }

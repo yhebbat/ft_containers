@@ -560,7 +560,7 @@ int main()
 	ft::avl_tree<ft::pair<int,int> > root;
 	// ft::avl_tree<int> root;
 	root.insert_(ft::make_pair(10,1));
-	root.insert_(ft::make_pair(20,2));
+	root.insert_(ft::make_pair(10,2));
 	root.insert_(ft::make_pair(30,3));
 	root.insert_(ft::make_pair(40,4));
 	root.insert_(ft::make_pair(50,5));
@@ -568,6 +568,8 @@ int main()
 	root.insert_(ft::make_pair(70,7));
 	root.insert_(ft::make_pair(80,8));
 	root.insert_(ft::make_pair(90,9));
+	if (root.search(100) != NULL)
+		std::cout << root.search(100)->data.second << std::endl;
 	// std::cout << "heello" << std::endl;
 	// root.exist(10);
 	// find_parent(_root);
@@ -638,7 +640,7 @@ int main()
 	// std::cout << "After deleting all" << std::endl;
 	// root.clear();
 	// root.print_tree(root._root);
-	// system("leaks a.out");
+	system("leaks a.out");
 	// root.print_tree();
 
 }

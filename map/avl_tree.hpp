@@ -2,6 +2,10 @@
 #define AVL_TREE_HPP
 
 #include <iostream>
+#include <functional>
+#include <memory>
+#include <stdexcept>
+#include <algorithm>
 #include "../utilities/utilities.hpp"
 
 namespace ft
@@ -53,8 +57,8 @@ namespace ft
 
     };
 
-    template < class T, typename  Compare = std::less<typename T::first_type>,
-     class Alloc = std::allocator<T> ,class Allconode = std::allocator<node<T> > >
+    template < class T, typename  Compare = std::less< typename T::first_type >,
+     class Alloc = std::allocator<T> >//,class Allconode = std::allocator<node<T> > >
     class avl_tree
     {
     public:
@@ -62,8 +66,8 @@ namespace ft
         typedef Alloc					allocator_type;
         typedef typename T::first_type	key_type;
         typedef typename T::second_type	mapped_type;
-        typedef Allconode				alloc_node;
-        // typedef typename Alloc::template rebind<node_type>::other alloc_node;
+        // typedef Allconode				alloc_node;
+        typedef typename Alloc::template rebind<node_type>::other alloc_node;
 
         private:
         Compare         _compare;
@@ -253,6 +257,24 @@ namespace ft
             return exist(_root, data);
         }
 
+        bool exist(T data)
+        {
+            return exist(_root, data);
+        }
+
+        bool exist(node_type *p, T data)
+        {
+            if(p == NULL)
+                return false;
+            if(p->data.first == data.first)
+                return true;
+            int cmp = _compare(data.first, p->data.first);
+            if(cmp)
+                return exist(p->left, data);
+            else
+                return exist(p->right, data);
+        }
+
         bool exist(node_type* p, key_type data)//check if the data is in the tree
         {
             if(p == NULL)
@@ -273,6 +295,12 @@ namespace ft
         node_type* search(key_type data)
         {
             return search(_root, data);
+        }
+
+        mapped_type search_second(key_type data)
+        {
+            node_type *p = search(_root, data);
+            return p->data.second;
         }
 
         node_type* search(node_type* p, key_type data)//search the data in the tree
@@ -471,15 +499,23 @@ namespace ft
             return node;
         }
 
+        void swap(avl_tree &other)
+        {
+            std::swap(this->_root, other._root);
+            std::swap(this->_size, other._size);
+            std::swap(this->_compare, other._compare);
+            std::swap(this->_alloc, other._alloc);//to check
+            std::swap(this->_alloc_node, other._alloc_node);//to check
+        }
 
-        bool delete_(key_type key)
+        int delete_(key_type key)
         {
             if (!exist(_root, key))
-                return false;
+                return (0);
             _root = delete_(_root, key);
             _size--;
             // find_parent(_root);
-            return true;
+            return (1);
         }
 
         node_type* delete_(node_type *p, key_type data)
