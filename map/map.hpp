@@ -2,6 +2,7 @@
 #define MAP_HPP
 
 #include "../utilities/utilities.hpp"
+#include "../vector/vector.hpp"
 #include "../iterators/bidirectional_iterator.hpp"
 #include "../iterators/iterator_traits.hpp"
 #include "../iterators/reverse_iterator.hpp"
@@ -121,7 +122,7 @@ namespace ft
         {
             node_type* p = ft::make_pair(k, mapped_type());
             _tree.insert_(p);
-            node_type *node = _tree.search(p.first);
+            node_type *node = _tree.search(p->data.first);
             return (node->_data.second);
         }
         /*
@@ -193,12 +194,161 @@ namespace ft
             node_type* p = _tree.search(k);
             return iterator(p, &_tree);
         }
+        const_iterator find (const key_type& k) const
+        {
+            node_type* p = _tree.search(k);
+            return const_iterator(p, &_tree);
+        }
         size_type count (const key_type& k) const
         {
             if (_tree.exist(k))
                 return 1;
             return 0;
         }
+        iterator lower_bound (const key_type& k)
+        {
+            if (_tree.exist(k))
+                return iterator(_tree.search(k), &_tree);
+            else if (_cmp(k, _tree.find_min()->_data.first))
+                return iterator(this->begin(), &_tree);
+            else if (_cmp(_tree.find_max()->_data.first, k))
+                return iterator(this->end(), &_tree);
+            else
+            {
+                iterator it = this->begin();
+                for(; it != this->end(); ++it)
+                {
+                    if (_cmp(it->first, k))
+                        it++;
+                    else
+                        break;
+                }
+                return (it);
+            }
+        }
+        const_iterator lower_bound (const key_type& k) const
+        {
+            if (_tree.exist(k))
+                return const_iterator(_tree.search(k), &_tree);
+            else if (_cmp(k, _tree.find_min()->_data.first))
+                return const_iterator(this->begin(), &_tree);
+            else if (_cmp(_tree.find_max()->_data.first, k))
+                return const_iterator(this->end(), &_tree);
+            else
+            {
+                const_iterator it = this->begin();
+                for(; it != this->end(); ++it)
+                {
+                    if (_cmp(it->first, k))
+                        it++;
+                    else
+                        break;
+                }
+                return (it);
+            }
+        }
+        iterator upper_bound (const key_type& k)
+        {
+            if (_tree.exist(k))
+            {
+                iterator it = this->find(k);
+                it++;
+                return it;
+            }
+            else if (_cmp(k, _tree.find_min()->_data.first))
+                return iterator(this->begin(), &_tree);
+            else if (_cmp(_tree.find_max()->_data.first, k))
+                return iterator(this->end(), &_tree);
+            else
+            {
+                iterator it = this->begin();
+                for(; it != this->end(); ++it)
+                {
+                    if (_cmp(it->first, k))
+                        it++;
+                    else
+                        break;
+                }
+                return (it);
+            }
+        }
+        const_iterator upper_bound (const key_type& k) const
+        {
+            if (_tree.exist(k))
+            {
+                const_iterator it = this->find(k);
+                it++;
+                return it;
+            }
+            else if (_cmp(k, _tree.find_min()->_data.first))
+                return const_iterator(this->begin(), &_tree);
+            else if (_cmp(_tree.find_max()->_data.first, k))
+                return const_iterator(this->end(), &_tree);
+            else
+            {
+                const_iterator it = this->begin();
+                for(; it != this->end(); ++it)
+                {
+                    if (_cmp(it->first, k))
+                        it++;
+                    else
+                        break;
+                }
+                return (it);
+            }
+        }
+        pair<iterator,iterator> equal_range (const key_type& k)
+        {
+            return ft::make_pair(lower_bound(k), upper_bound(k));
+        }
+        pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+        {
+            return ft::make_pair(lower_bound(k), upper_bound(k));
+        }
+        /*
+                                            ********* Allocator ***********
+        */
+        allocator_type get_allocator() const {return _alloc;}
     };
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator== ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs )
+                    {
+                        if (lhs.size() != rhs.size())
+                            return false;
+                        return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+                    }
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator!= ( const map<Key,T,Compare,Alloc>& lhs,
+                        const map<Key,T,Compare,Alloc>& rhs )
+                    {
+                        return !(lhs == rhs);
+                    }
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator< ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs )
+                    {
+                        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+                    }
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator<= ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs )
+                    {
+                        return !(rhs < lhs);
+                    }
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator> ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs )
+                    {
+                        return (rhs < lhs);
+                    }
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator>= ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs )
+                    {
+                        return !(lhs < rhs);
+                    }
+    template <class Key, class T, class Compare, class Alloc>
+      void swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y){x.swap(y);}
 }
 #endif
