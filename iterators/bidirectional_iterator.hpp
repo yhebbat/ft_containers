@@ -1,7 +1,8 @@
-#ifndef BI_DIRECTIONAL_ITERATOR_HPP
-#define BI_DIRECTIONAL_ITERATOR_HPP
+#ifndef BIDIRECTIONAL_ITERATOR_HPP
+#define BIDIRECTIONAL_ITERATOR_HPP
 
 #include <memory>
+#include <iostream>
 #include "iterator_traits.hpp"
 #include "../utilities/utilities.hpp"
 #include "../map/avl_tree.hpp"
@@ -12,21 +13,21 @@ namespace ft
     class bidirectional_iterator
     {
         public:
-            typedef typename ft::iterator<std::bidirectional_iterator_tag, T>::difference_type		difference_type;
-            typedef	typename ft::iterator<std::bidirectional_iterator_tag, T>::value_type			value_type;
-            typedef typename ft::iterator<std::bidirectional_iterator_tag, T>::pointer				pointer;
-            typedef	typename ft::iterator<std::bidirectional_iterator_tag, T>::reference			reference;
-            typedef	typename ft::iterator<std::bidirectional_iterator_tag, T>::iterator_category	iterator_category;
+            typedef typename iterator<std::bidirectional_iterator_tag, T>::difference_type		difference_type;
+            typedef	typename iterator<std::bidirectional_iterator_tag, T>::value_type			value_type;
+            typedef typename iterator<std::bidirectional_iterator_tag, T>::pointer				pointer;
+            typedef	typename iterator<std::bidirectional_iterator_tag, T>::reference			reference;
+            typedef	typename iterator<std::bidirectional_iterator_tag, T>::iterator_category	iterator_category;
             typedef	Compare                                                                         compare;
-            typedef typename ft::avl_tree<T, Compare>                                               tree_type;
-            typedef typename ft::node<T>                                                            node_type;
+            typedef avl_tree<T, Compare>                                               tree_type;
+            typedef node<T>                                                            node_type;
         private:
 			node_type		    *_node;
 			tree_type			*_tree;
         public:
             bidirectional_iterator() : _node(NULL), _tree(NULL) {}
             bidirectional_iterator(node_type *node, tree_type *tree) : _node(node), _tree(tree) {};
-            bidirectional_iterator(const bidirectional_iterator &other) {*this = other;}};
+            bidirectional_iterator(const bidirectional_iterator &other) {*this = other;};
             ~bidirectional_iterator() {};
             bidirectional_iterator &operator=(const bidirectional_iterator &other)
             { 
@@ -36,8 +37,8 @@ namespace ft
                 return *this;
             };
 
-            bool operator==(const bidirectional_iterator &other) const { return (this->_node == other._node); };
-            bool operator!=(const bidirectional_iterator &other) const { return (this->_node != other._node); };
+            bool operator==(const bidirectional_iterator &other) const { return (_node == other._node); };
+            bool operator!=(const bidirectional_iterator &other) const { return (_node != other._node); };
 
             reference operator*() const{ return _node->data; };
             pointer operator->() const{ return &(_node->data); };
@@ -70,8 +71,7 @@ namespace ft
             operator bidirectional_iterator< const T, compare>() const//to check
             {
                 return bidirectional_iterator< const T, compare>(this->_node, this->_tree);
-            };	
-        
+            };
     };
 }
 
