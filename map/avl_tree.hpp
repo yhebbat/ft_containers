@@ -226,17 +226,17 @@ namespace ft
             return NULL;
         }
 
-        node_type *find_min()
+        node_type *find_min() const
         {
             return find_min(_root);
         }
 
-        node_type *find_max()
+        node_type *find_max() const
         {
             return find_max(_root);
         }
 
-        node_type *find_min(node_type *p)//find the node_type in the tree
+        node_type *find_min(node_type *p) const//find the node_type in the tree
         {
             if(p->left)
                 return find_min(p->left);
@@ -244,7 +244,7 @@ namespace ft
                 return p;
         }
 
-        node_type *find_max(node_type *p)//find the node_type in the tree
+        node_type *find_max(node_type *p) const//find the node_type in the tree
         {
             if(p->right)
                 return find_max(p->right);
@@ -448,16 +448,23 @@ namespace ft
             this->_root = this->insert_(_root, data);
             this->_size++;
             // find_parent(_root);
-            return true;
+            return true; 
         }
-
+        node_type* insert(T data)
+        {
+            if (exist(_root, data.first))
+                return search(data.first);
+            this->_root = this->insert_(_root, data);
+            this->_size++;
+            return(search(data.first));
+        }
         node_type* insert_(node_type *r,T data)
         {
             // if (r != NULL)
             // 	std::cout << "inserting " << data << " in the tree" << r->data << std::endl;
             if(r == NULL)
             {
-                // std::cout << "inserting " << data << std::endl;
+                // std::cout << "inserting " << data.first << std::endl;
                 node_type *n;
                 // n = new node_type;
                 n = _alloc_node.allocate(1);
@@ -466,6 +473,7 @@ namespace ft
                 r = n;
                 r->left = r->right = r->parent = NULL;
                 r->height = 1;
+                // this->_root = r;
                 return r;             
             }
             else

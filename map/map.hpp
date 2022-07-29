@@ -20,9 +20,9 @@ namespace ft
     class map
     {
     public:
-        typedef ft::pair<const Key,T>                           value_type;
-        typedef Key                                             key_type;
         typedef T                                               mapped_type;
+        typedef Key                                             key_type;
+        typedef ft::pair<const Key,T>                           value_type;
         typedef Compare                                         key_compare;
         typedef class value_compare: public std::binary_function<value_type, value_type, bool>
         {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
@@ -44,8 +44,8 @@ namespace ft
         typedef typename allocator_type::const_reference                        const_reference;
         typedef typename allocator_type::pointer                                pointer;
         typedef typename allocator_type::const_pointer                          const_pointer;
-        typedef typename ft::bidirectional_iterator<value_type, key_compare>            iterator;
-        typedef typename ft::bidirectional_iterator< const value_type,const key_compare> const_iterator;
+        typedef typename ft::bidirectional_iterator<const value_type, key_compare>            iterator;
+        typedef typename ft::bidirectional_iterator< value_type, key_compare> const_iterator;
         typedef typename ft::reverse_iterator<iterator>                         reverse_iterator;
         typedef typename ft::reverse_iterator<const_iterator>                   const_reverse_iterator;
         typedef ptrdiff_t                                                       difference_type;
@@ -120,19 +120,24 @@ namespace ft
         //************************ Return reference to element at specified position.
         mapped_type& operator[] (const key_type& k)
         {
-            node_type* p = ft::make_pair(k, mapped_type());
-            _tree.insert_(p);
+            node_type* p = _tree.insert(ft::make_pair(k, mapped_type()));
             node_type *node = _tree.search(p->data.first);
-            return (node->_data.second);
+            return (node->data.second);
         }
         /*
                                             *********  Modifiers ***********
         */
+
+        // void    insert (const value_type& val){
+        //     _tree.insert(val);
+        // }
         pair<iterator,bool> insert (const value_type& val)
         {
-            if (_tree.exist(val.first))
-                return ft::pair<iterator,bool>(iterator(_tree.search(val.first), &_tree), false);
-            return ft::pair<iterator,bool>(iterator(_tree.insert_(val), &_tree), true);
+           if (_tree.exist(val.first))
+               return ft::pair<iterator,bool>(iterator(_tree.search(val.first), &_tree), false);
+           ft::pair<iterator,bool>(iterator(_tree.insert(val), &_tree), true);
+        //    _tree.print_tree();
+           return ft::pair<iterator,bool>(iterator(_tree.insert(val), &_tree), true);
         }
         iterator insert (iterator position, const value_type& val)
         {
@@ -152,7 +157,7 @@ namespace ft
         }
         void erase(iterator position)
         {
-            _tree.delete_(position.node()->_data.first);
+            _tree.delete_(position.node()->data.first);
         }
         size_type erase (const key_type& k)
         {
@@ -170,7 +175,7 @@ namespace ft
         // {
         //     ft::vector<int> v;
         //     for(; first != last; ++first)
-        //         v.push_back(first.node()->_data.first);
+        //         v.push_back(first.node()->data.first);
         //     for(ft::vector<int>::iterator it = v.begin(); it != v.end(); ++it)
         //         erase(*it);
         // }
@@ -209,9 +214,9 @@ namespace ft
         {
             if (_tree.exist(k))
                 return iterator(_tree.search(k), &_tree);
-            else if (_cmp(k, _tree.find_min()->_data.first))
+            else if (_cmp(k, _tree.find_min()->data.first))
                 return iterator(this->begin(), &_tree);
-            else if (_cmp(_tree.find_max()->_data.first, k))
+            else if (_cmp(_tree.find_max()->data.first, k))
                 return iterator(this->end(), &_tree);
             else
             {
@@ -230,9 +235,9 @@ namespace ft
         {
             if (_tree.exist(k))
                 return const_iterator(_tree.search(k), &_tree);
-            else if (_cmp(k, _tree.find_min()->_data.first))
+            else if (_cmp(k, _tree.find_min()->data.first))
                 return const_iterator(this->begin(), &_tree);
-            else if (_cmp(_tree.find_max()->_data.first, k))
+            else if (_cmp(_tree.find_max()->data.first, k))
                 return const_iterator(this->end(), &_tree);
             else
             {
@@ -255,9 +260,9 @@ namespace ft
                 it++;
                 return it;
             }
-            else if (_cmp(k, _tree.find_min()->_data.first))
+            else if (_cmp(k, _tree.find_min()->data.first))
                 return iterator(this->begin(), &_tree);
-            else if (_cmp(_tree.find_max()->_data.first, k))
+            else if (_cmp(_tree.find_max()->data.first, k))
                 return iterator(this->end(), &_tree);
             else
             {
@@ -280,9 +285,9 @@ namespace ft
                 it++;
                 return it;
             }
-            else if (_cmp(k, _tree.find_min()->_data.first))
+            else if (_cmp(k, _tree.find_min()->data.first))
                 return const_iterator(this->begin(), &_tree);
-            else if (_cmp(_tree.find_max()->_data.first, k))
+            else if (_cmp(_tree.find_max()->data.first, k))
                 return const_iterator(this->end(), &_tree);
             else
             {
@@ -309,6 +314,10 @@ namespace ft
                                             ********* Allocator ***********
         */
         allocator_type get_allocator() const {return _alloc;}
+
+        void Test(){
+            _tree.print_tree();
+        }
     };
     template <class Key, class T, class Compare, class Alloc>
     bool operator== ( const map<Key,T,Compare,Alloc>& lhs,
