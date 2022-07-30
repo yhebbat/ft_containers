@@ -10,26 +10,28 @@
 
 namespace ft
 {
-    template <class T>
+    template <class T, class Alloc>
     class node {
     public:
+        typedef Alloc allcator_type;
+        allcator_type _alloc;
         T	data;
         int height;
         node *left;
         node *right;
         node *parent;
 
-        node(T data):data(data),height(0),left(NULL),right(NULL){};
+        node(T data):data(data),height(0),left(NULL),right(NULL),_alloc(){};
         ~node() {};
-        node() {
+        node() : _alloc(){
                 this->left = NULL;
                 this->right = NULL;
                 this->height = 0;
                 this->parent = NULL;
         }
-        node(const node& rhs)
+        node(const node& rhs) :_alloc()
         {
-            this->data = rhs.data;
+            _alloc.construct(&this->data, rhs.data);
             this->height = rhs.height;
             this->left = rhs.left;
             this->right = rhs.right;
@@ -47,7 +49,8 @@ namespace ft
         };
         node &operator=(const node& rhs)
         {
-            this->data = rhs.data;
+            //this->data = rhs.data;
+            _alloc.construct(&this->data, rhs.data);
             this->height = rhs.height;
             this->left = rhs.left;
             this->right = rhs.right;
@@ -62,13 +65,13 @@ namespace ft
     class avl_tree
     {
     public:
-        typedef node<T>					node_type;
+        typedef node<T, Alloc>			node_type;
         typedef Alloc					allocator_type;
         typedef typename T::first_type	key_type;
         typedef typename T::second_type	mapped_type;
         // typedef Allconode				alloc_node;
         typedef typename Alloc::template rebind<node_type>::other alloc_node;
-
+    
         private:
         Compare         _compare;
         node_type		*_root;
@@ -555,12 +558,15 @@ namespace ft
                         *p = *temp;
                     _alloc.destroy(&(temp->data));
                     _alloc_node.deallocate(temp, 1);
+                    // temp = NULL;
                 }
                 else
                 {
                     node_type *temp;
                     temp = min_node(p->right);
-                    p->data = temp->data;
+                    //p->data = temp->data;
+                    _alloc.construct(&(p->data), temp->data);
+                     //p->data(temp->data.first, temp->data.second);
                     p->right = delete_(p->right,temp->data.first);
                 }
             }
