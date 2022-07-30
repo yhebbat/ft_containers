@@ -47,7 +47,7 @@ namespace ft
         typedef ft::avl_tree<value_type, key_compare, allocator_type>           tree_type;
         typedef ft::node<value_type, Alloc>         node_type;
         typedef typename ft::bidirectional_iterator< value_type, tree_type, node_type>   iterator;
-        typedef typename ft::bidirectional_iterator< const value_type, tree_type, node_type>   const_iterator;
+        typedef typename ft::bidirectional_iterator<const value_type, tree_type, node_type>   const_iterator;
         typedef typename ft::reverse_iterator<iterator>                         reverse_iterator;
         typedef typename ft::reverse_iterator<const_iterator>                   const_reverse_iterator;
         typedef ptrdiff_t                                                       difference_type;
@@ -325,9 +325,9 @@ namespace ft
     bool operator== ( const map<Key,T,Compare,Alloc>& lhs,
                     const map<Key,T,Compare,Alloc>& rhs )
                     {
-                        if (lhs.size() != rhs.size())
-                            return false;
-                        return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+                        // if (lhs.size() != rhs.size())
+                        //     return false;
+                        return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
                     }
     template <class Key, class T, class Compare, class Alloc>
     bool operator!= ( const map<Key,T,Compare,Alloc>& lhs,

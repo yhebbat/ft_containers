@@ -7,18 +7,25 @@
 int main()
 {
     ft::map< int, int> m;
+    ft::map< int, int> p;
     
     m.insert(ft::make_pair(1, 1));
     m.insert(ft::make_pair(2, 2));
     m.insert(ft::make_pair(3, 3));
     m.insert(ft::make_pair(4, 4));
-
+    p = m;
+    // m.erase(3);
     ft::map<int, std::string> ft_m1;
-
+    std::cout << "size m: " << m.size() << std::endl;
+    std::cout << "size p: " << p.size() << std::endl;
+    if (m == p)
+        std::cout << "blaan: " << ft_m1.size() << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         ft_m1.insert(ft::make_pair(i, "string2"));
     }
+    std::cout << "size 2: " << ft_m1.size() << std::endl;
+
     ft::map<int, std::string> const ft_m2(ft_m1.begin(), ft_m1.end());
 
     std::string res, ft_res, c_res, c_ft_res;
