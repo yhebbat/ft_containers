@@ -10,7 +10,7 @@
 
 namespace ft
 {
-    template <class T, class Alloc>
+    template < class T, class Alloc >
     class node {
     public:
         typedef Alloc allcator_type;
@@ -20,17 +20,19 @@ namespace ft
         node *left;
         node *right;
         node *parent;
+        // allcator_type _alloc;
 
-        node(T data):data(data),height(0),left(NULL),right(NULL),_alloc(){};
+        node(const T &data):data(data),height(0),left(NULL),right(NULL),parent(NULL){};
         ~node() {};
-        node() : _alloc(){
+        node() {
                 this->left = NULL;
                 this->right = NULL;
                 this->height = 0;
                 this->parent = NULL;
         }
-        node(const node& rhs) :_alloc()
+        node(const node& rhs)
         {
+            // this->data = rhs.data;
             _alloc.construct(&this->data, rhs.data);
             this->height = rhs.height;
             this->left = rhs.left;
@@ -49,7 +51,7 @@ namespace ft
         };
         node &operator=(const node& rhs)
         {
-            //this->data = rhs.data;
+            // this->data = rhs.data;
             _alloc.construct(&this->data, rhs.data);
             this->height = rhs.height;
             this->left = rhs.left;
@@ -58,29 +60,40 @@ namespace ft
             return *this;
         };
 
+        node *operator=(const node* rhs)
+        {
+            // this->data = rhs.data;
+            _alloc.construct(&this->data, rhs->data);
+            this->height = rhs->height;
+            this->left = rhs->left;
+            this->right = rhs->right;
+            this->parent = rhs->parent;
+            return this;
+        };
+
     };
 
-    template < class T, typename  Compare = std::less< typename T::first_type >,
+    template < class T, typename  Compare = std::less<typename T::first_type>,
      class Alloc = std::allocator<T> >//,class Allconode = std::allocator<node<T> > >
     class avl_tree
     {
     public:
-        typedef node<T, Alloc>			node_type;
+        typedef node<T, Alloc>					node_type;
         typedef Alloc					allocator_type;
         typedef typename T::first_type	key_type;
         typedef typename T::second_type	mapped_type;
         // typedef Allconode				alloc_node;
         typedef typename Alloc::template rebind<node_type>::other alloc_node;
-    
+        node_type		*_root;
+
         private:
         Compare         _compare;
-        node_type		*_root;
         allocator_type	_alloc;
         alloc_node		_alloc_node;
         size_t			_size;
 
         public:
-        avl_tree():_size(0) { _root = NULL; };
+        avl_tree():_root(NULL) ,_size(0) , _compare(), _alloc(), _alloc_node(){};
         avl_tree(const avl_tree &other) : _root(other._root), _size(other._size)
         {
             *this = other;
@@ -152,13 +165,13 @@ namespace ft
 
         node_type *find_next(key_type data)
         {
-            find_parent(_root);
+            // find_parent(_root);
             return find_next(data, _root);
         }
 
         node_type *find_next(node_type *data)
         {
-            find_parent(_root);
+            // find_parent(_root);
             return find_next(data->data.first, _root);
         }
 
@@ -241,10 +254,9 @@ namespace ft
 
         node_type *find_min(node_type *p) const//find the node_type in the tree
         {
-            if(p->left)
-                return find_min(p->left);
-            else
-                return p;
+            while (p->left != NULL)
+                p = p->left;
+            return (p);
         }
 
         node_type *find_max(node_type *p) const//find the node_type in the tree
@@ -255,17 +267,17 @@ namespace ft
                 return p;
         }
 
-        bool exist(key_type data)
+        bool exist(key_type data) const
         {
             return exist(_root, data);
         }
 
-        bool exist(T data)
+        bool exist(T data) const
         {
-            return exist(_root, data);
+            return exist_(_root, data);
         }
 
-        bool exist(node_type *p, T data)
+        bool exist_(node_type *p, T data) const
         {
             if(p == NULL)
                 return false;
@@ -273,12 +285,12 @@ namespace ft
                 return true;
             int cmp = _compare(data.first, p->data.first);
             if(cmp)
-                return exist(p->left, data);
+                return exist_(p->left, data);
             else
-                return exist(p->right, data);
+                return exist_(p->right, data);
         }
 
-        bool exist(node_type* p, key_type data)//check if the data is in the tree
+        bool exist(node_type* p, key_type data) const//check if the data is in the tree
         {
             if(p == NULL)
                 return false;
@@ -295,18 +307,18 @@ namespace ft
             // else
         }
 
-        node_type* search(key_type data)
+        node_type* search(key_type data) const
         {
             return search(_root, data);
         }
 
-        mapped_type search_second(key_type data)
+        mapped_type search_second(key_type data) const
         {
             node_type *p = search(_root, data);
             return p->data.second;
         }
 
-        node_type* search(node_type* p, key_type data)//search the data in the tree
+        node_type* search(node_type* p, key_type data) const//search the data in the tree
         {
             if(p == NULL)
                 return NULL;
@@ -450,7 +462,7 @@ namespace ft
                 return false;
             this->_root = this->insert_(_root, data);
             this->_size++;
-            // find_parent(_root);
+            find_parent(_root);
             return true; 
         }
         node_type* insert(T data)
@@ -459,6 +471,7 @@ namespace ft
                 return search(data.first);
             this->_root = this->insert_(_root, data);
             this->_size++;
+            find_parent(_root);
             return(search(data.first));
         }
         node_type* insert_(node_type *r,T data)
@@ -483,9 +496,17 @@ namespace ft
             {
                 int cmp = _compare(data.first, r->data.first);
                 if(cmp)
-                    r->left = insert_(r->left, data);
+                {
+                    node_type* new_node = insert_(r->left, data);
+                    r->left = new_node;
+                    // new_node->parent = r;
+                }
                 else
-                    r->right = insert_(r->right, data);
+                {
+                    node_type* new_node = insert_(r->right, data);
+                    r->right = new_node;
+                    // new_node->parent = r;
+                }
             }
             r->height = calcul_height(r);
             if(bf(r)==2 && bf(r->left)==1)
@@ -525,7 +546,7 @@ namespace ft
                 return (0);
             _root = delete_(_root, key);
             _size--;
-            // find_parent(_root);
+            find_parent(_root);
             return (1);
         }
 
@@ -558,15 +579,13 @@ namespace ft
                         *p = *temp;
                     _alloc.destroy(&(temp->data));
                     _alloc_node.deallocate(temp, 1);
-                    // temp = NULL;
                 }
                 else
                 {
                     node_type *temp;
                     temp = min_node(p->right);
-                    //p->data = temp->data;
+                    // p->data = temp->data;
                     _alloc.construct(&(p->data), temp->data);
-                     //p->data(temp->data.first, temp->data.second);
                     p->right = delete_(p->right,temp->data.first);
                 }
             }
