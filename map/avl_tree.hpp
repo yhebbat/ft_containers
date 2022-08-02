@@ -254,17 +254,22 @@ namespace ft
 
         node_type *find_min(node_type *p) const//find the node_type in the tree
         {
-            while (p->left != NULL)
-                p = p->left;
+            if (p)
+            {
+                while (p->left != NULL)
+                    p = p->left;
+            }
             return (p);
         }
 
         node_type *find_max(node_type *p) const//find the node_type in the tree
         {
-            if(p->right)
-                return find_max(p->right);
-            else
-                return p;
+            if (p)
+            {
+                while (p->right != NULL)
+                    p = p->right;
+            }
+            return (p);
         }
 
         bool exist(key_type data) const
@@ -341,14 +346,14 @@ namespace ft
             tp = p->left;
             p->left = tp->right;
             tp->right = p;
-            // tp->parent = p->parent; //added
-            // if (p->left) //added
-            // {
-            //     node_type *n;
-            //     n = p->left;
-            //     n->parent = p;
-            // }
-            // p->parent = tp; //added
+            tp->parent = p->parent; //added
+            p->parent = tp; //added
+            if (p->left) //added
+            {
+                node_type *n;
+                n = p->left;
+                n->parent = tp->right;
+            }
             p->height = calcul_height(p);
             tp->height = calcul_height(tp);
             return (tp); 
@@ -363,14 +368,14 @@ namespace ft
             tp = p->right;
             p->right = tp->left;
             tp->left = p;
-            // tp->parent = p->parent; //added
-            // if (p->right) //added
-            // {
-            //     node_type *n;
-            //     n = p->right;
-            //     n->parent = p;
-            // }
-            // p->parent = tp; //added
+            tp->parent = p->parent; //added
+            p->parent = tp; //added
+            if (p->right) //added
+            {
+                node_type *n;
+                n = p->right;
+                n->parent = tp->left;
+            }
             p->height = calcul_height(p);
             tp->height = calcul_height(tp);
             return (tp); 
@@ -380,11 +385,11 @@ namespace ft
         {
             node_type *p;
             node_type *tp;
-            node_type *tpp;
+            // node_type *tpp;
 
             p = n;
             tp = p->right;
-            tpp = tp->left;
+            // tpp = tp->left;
             // p->right = tpp->left;
             // tp->left = tpp->right;
             // tpp->left = p;
@@ -405,11 +410,11 @@ namespace ft
         {
             node_type *p;
             node_type *tp;
-            node_type *tpp;
+            // node_type *tpp;
 
             p = n;
             tp = p->left;
-            tpp = tp->right;
+            // tpp = tp->right;
             // p->left = tpp->right;
             // tp->right = tpp->left;
             // tpp->right = p;
@@ -447,11 +452,6 @@ namespace ft
             p = NULL;
             _size = 0;
         }
-
-        void find_parent()
-        {
-            find_parent(_root);
-        }
         void find_parent(node_type *p)
         {
             if (p == NULL)
@@ -488,7 +488,7 @@ namespace ft
                 return false;
             this->_root = this->insert_(_root, data);
             this->_size++;
-            find_parent(_root);
+            // find_parent(_root);
             return true; 
         }
         node_type* insert(T data)
@@ -497,7 +497,7 @@ namespace ft
                 return search(data.first);
             this->_root = this->insert_(_root, data);
             this->_size++;
-            find_parent(_root);
+            // find_parent(_root);
             return(search(data.first));
         }
         node_type* insert_(node_type *r,T data)
@@ -574,7 +574,9 @@ namespace ft
                 return (0);
             _root = delete_(_root, key);
             _size--;
-            find_parent(_root);
+            // std::cout << "==============" << std::endl;
+            // print_tree();
+            // find_parent(_root);
             return (1);
         }
 
@@ -604,16 +606,21 @@ namespace ft
                         p = NULL;
                     }
                     else
+                    {
+                        temp->parent = p->parent;
                         *p = *temp;
+                    }
                     _alloc.destroy(&(temp->data));
                     _alloc_node.deallocate(temp, 1);
                 }
                 else
                 {
+                    node_type *dad = p->parent;
                     node_type *temp;
                     temp = min_node(p->right);
                     // p->data = temp->data;
                     _alloc.construct(&(p->data), temp->data);
+                    p->parent = dad;
                     p->right = delete_(p->right,temp->data.first);
                 }
             }

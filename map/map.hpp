@@ -74,7 +74,7 @@ namespace ft
             }
         };
         map (const map& x) { *this = x; };
-        ~map(){};
+        ~map(){this->_tree.clear();};
         map& operator= (const map& x)
         {
             this->_tree.clear();
@@ -166,20 +166,17 @@ namespace ft
         }
         void erase(iterator first, iterator last)//to check look at fct li lta7t
         {
+            ft::vector<key_type> v;
             while (first != last)
             {
-                erase(first);
+                // erase(first);
+                v.push_back(first->first);
                 ++first;
             }
+            for (int i = 0; i < v.size(); i++)
+                erase(v[i]);
         }
-        // void erase(iterator first, iterator last)
-        // {
-        //     ft::vector<int> v;
-        //     for(; first != last; ++first)
-        //         v.push_back(first.node()->data.first);
-        //     for(ft::vector<int>::iterator it = v.begin(); it != v.end(); ++it)
-        //         erase(*it);
-        // }
+        
         void swap (map& x)
         {
             _tree.swap(x._tree);
