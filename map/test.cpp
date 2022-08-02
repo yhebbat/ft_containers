@@ -6,15 +6,19 @@
 
 int main()
 {
-    ft::map<int, int> m;
+    // ft::map<int, int> m;
 
-    m.insert(ft::make_pair(1, 1));
-    m.insert(ft::make_pair(2, 2));
-    m.insert(ft::make_pair(3, 3));
-    m.insert(ft::make_pair(4, 4));
-    ft::map< int, int>::iterator tmp = m.begin();
+    // m.insert(ft::make_pair(1, 1));
+    // m.insert(ft::make_pair(2, 2));
+    // m.insert(ft::make_pair(3, 3));
+    // m.insert(ft::make_pair(4, 4));
+
+    ft::map<int, std::string> my_m;
+    for (int i = 0; i < 1e6; ++i)
+        my_m.insert(ft::make_pair(i, "fill constructor test"));
+    // ft::map< int, int>::iterator tmp = m.begin();
     // ft::map<int, int>::iterator my_it, my_it1;
-    ft::map< int, int>::const_iterator tmp1(tmp);
+    // ft::map< int, int>::const_iterator tmp1(tmp);
     // std::cout << "hey" << tmp->first<< std::endl;
     // m.Test();
     
