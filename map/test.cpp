@@ -6,6 +6,16 @@
 
 int main()
 {
+
+    ft::map<int, int> ft_m;
+    std::map<int, int> std_m;
+    for (int i = 3; i < 13; ++i)
+        ft_m.insert(ft::make_pair(i, i));
+    for (int i = 3; i < 13; ++i)
+        std_m.insert(std::make_pair(i, i));
+
+    std::cout << "mine : "<< ft_m.upper_bound(300)->first << std::endl;
+    std::cout << "std : "<< std_m.upper_bound(300)->first << std::endl;
     // ft::map<int, int> m;
 
     // m.insert(ft::make_pair(1, 1));
@@ -13,9 +23,9 @@ int main()
     // m.insert(ft::make_pair(3, 3));
     // m.insert(ft::make_pair(4, 4));
 
-    ft::map<int, std::string> my_m;
-    for (int i = 0; i < 1e6; ++i)
-        my_m.insert(ft::make_pair(i, "fill constructor test"));
+    // ft::map<int, std::string> my_m;
+    // for (int i = 0; i < 1e6; ++i)
+    //     my_m.insert(ft::make_pair(i, "fill constructor test"));
     // ft::map< int, int>::iterator tmp = m.begin();
     // ft::map<int, int>::iterator my_it, my_it1;
     // ft::map< int, int>::const_iterator tmp1(tmp);

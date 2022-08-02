@@ -277,6 +277,42 @@ namespace ft
             return exist(_root, data);
         }
 
+        node_type *upper_bound(key_type data) const {
+
+            node_type *ret = NULL;
+            node_type *node = _root;
+            while(node != NULL){
+                if (_compare(data, node->data.first))
+                {
+                    ret = node;
+                    node = node->left;
+                }
+                else
+                    node = node->right;
+            }
+            return ret;
+        }
+
+        node_type *lower_bound(key_type data) const {
+
+            node_type *ret = NULL;
+            node_type *node = _root;
+            if (exist(node, data))
+            {
+                node_type *ret = search(data);
+                return ret;
+            }
+            while(node != NULL){
+                if (_compare(data, node->data.first))
+                {
+                    ret = node;
+                    node = node->left;
+                }
+                else
+                    node = node->right;
+            }
+            return ret;
+        }
         bool exist(T data) const
         {
             return exist_(_root, data);
@@ -297,18 +333,24 @@ namespace ft
 
         bool exist(node_type* p, key_type data) const//check if the data is in the tree
         {
+            
             if(p == NULL)
+            {
                 return false;
+            }
             // std::cout << data << "||"<< p->data.first << std::endl;
             if(p->data.first == data)
                 return true;
+            
             int cmp = _compare(data, p->data.first);
             // std::cout << cmp << std::endl;
             // if(p->data > data)
-            if(cmp)
+            if(cmp && p->left)
                 return exist(p->left, data);
-            else
+            else if (p->right)
                 return exist(p->right, data);
+            else
+                return false;
             // else
         }
 

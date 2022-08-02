@@ -29,13 +29,7 @@ namespace ft
 
             bidirectional_iterator(const bidirectional_iterator &other) {*this = other;};
             ~bidirectional_iterator() {};
-            // operator bidirectional_iterator< T, const tree_type>() const//to check
-            // {
-            //     return bidirectional_iterator< T, const tree_type>(this->_node, this->_tree);
-            // };
-            // operator const_iterator()const {
-			//     return const_iterator( this->_node,this->_tree);
-		    // }
+
             bidirectional_iterator &operator=(const bidirectional_iterator &other)
             { 
 
@@ -44,8 +38,8 @@ namespace ft
                 return *this;
             };
 
-            friend bool operator== (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return lhs._node == rhs._node; }
-		    friend bool operator!= (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return (!(lhs == rhs)); }
+            friend bool operator== (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return lhs._node == rhs._node; };//check if it can work without friend
+		    friend bool operator!= (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return (!(lhs == rhs)); };//check if it can work without friend
 
             reference operator*() const{ return _node->data; };
             pointer operator->() const{ return &(_node->data); };

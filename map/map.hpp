@@ -210,95 +210,108 @@ namespace ft
         }
         iterator lower_bound (const key_type& k)
         {
-            if (_tree.exist(k))
-                return iterator(_tree.search(k), &_tree);
-            else if (_cmp(k, _tree.find_min()->data.first))
-                return this->begin();
-            else if (_cmp(_tree.find_max()->data.first, k))
-                return this->end();
-            else
-            {
-                iterator it = this->begin();
-                for(; it != this->end(); ++it)
-                {
-                    if (_cmp(it->first, k))
-                        it++;
-                    else
-                        break;
-                }
-                return (it);
-            }
+            // if (_tree.exist(k))
+            //     return iterator(_tree.search(k), &_tree);}
+            // else if (_cmp(k, _tree.find_min()->data.first))
+            //     return this->begin();}
+            // else if (_cmp(_tree.find_max()->data.first, k))
+            //     return this->end();
+            // else
+            // {
+            //     iterator it = this->begin();
+            //     for(; it != this->end(); ++it)
+            //     {
+            //         if (_cmp(it->first, k))
+            //             it++;
+            //         else
+            //             break;
+            //     }
+            //     return (it);
+            // }
+            return (iterator(_tree.lower_bound(k), &_tree));
+
         }
         const_iterator lower_bound (const key_type& k) const
         {
-            if (_tree.exist(k))
-                return const_iterator(_tree.search(k), &_tree);
-            else if (_cmp(k, _tree.find_min()->data.first))
-                return this->begin();
-            else if (_cmp(_tree.find_max()->data.first, k))
-                return this->end();
-            else
-            {
-                const_iterator it = this->begin();
-                for(; it != this->end(); ++it)
-                {
-                    if (_cmp(it->first, k))
-                        it++;
-                    else
-                        break;
-                }
-                return (it);
-            }
+            // std::cout << "ddddddddd" << std::endl;
+
+            // if (_tree.exist(k))
+            //     return const_iterator(_tree.search(k), &_tree);
+            // else if (_cmp(k, _tree.find_min()->data.first))
+            // {    std::cout << "ddd 0" << std::endl;
+            //     return this->begin();}
+            // else if (_cmp(_tree.find_max()->data.first, k))
+            // {
+            //     std::cout << "ddd" << std::endl;
+            //     return this->end();
+            // }
+            // else
+            // {
+            //     std::cout << "ddd 0" << std::endl;
+
+            //     const_iterator it = this->begin();
+            //     for(; it != this->end(); ++it)
+            //     {
+            //         if (_cmp(it->first, k))
+            //             it++;
+            //         else
+            //             break;
+            //     }
+            //     return (it);
+            // }
+            return (const_iterator(_tree.lower_bound(k), &_tree));
         }
         iterator upper_bound (const key_type& k)
         {
-            if (_tree.exist(k))
-            {
-                iterator it = this->find(k);
-                it++;
-                return it;
-            }
-            else if (_cmp(k, _tree.find_min()->data.first))
-                return this->begin();
-            else if (_cmp(_tree.find_max()->data.first, k))
-                return this->end();
-            else
-            {
-                iterator it = this->begin();
-                for(; it != this->end(); ++it)
-                {
-                    if (_cmp(it->first, k))
-                        it++;
-                    else
-                        break;
-                }
-                return (it);
-            }
+            // if (_tree.exist(k))
+            // {
+            //     iterator it = this->find(k);
+            //     it++;
+            //     return it;
+            // }
+            // else if (_cmp(k, _tree.find_min()->data.first))
+            //     return this->begin();
+            // else if (_cmp(_tree.find_max()->data.first, k))
+            //     return this->end();
+            // else
+            // {
+            //     iterator it = this->begin();
+            //     for(; it != this->end(); ++it)
+            //     {
+            //         if (_cmp(it->first, k))
+            //             it++;
+            //         else
+            //             break;
+            //     }
+            //     return (it);
+            // }
+            return (iterator(_tree.upper_bound(k), &_tree));
         }
         const_iterator upper_bound (const key_type& k) const
         {
-            if (_tree.exist(k))
-            {
-                const_iterator it = this->find(k);
-                it++;
-                return it;
-            }
-            else if (_cmp(k, _tree.find_min()->data.first))
-                return this->begin();
-            else if (_cmp(_tree.find_max()->data.first, k))
-                return this->end();
-            else
-            {
-                const_iterator it = this->begin();
-                for(; it != this->end(); ++it)
-                {
-                    if (_cmp(it->first, k))
-                        it++;
-                    else
-                        break;
-                }
-                return (it);
-            }
+            // if (_tree.exist(k))
+            // {
+            //     const_iterator it = this->find(k);
+            //     it++;
+            //     return it;
+            // }
+            // else if (_cmp(k, _tree.find_min()->data.first))
+            //     return this->begin();
+            // else if (_cmp(_tree.find_max()->data.first, k))
+            //     return this->end();
+            // else
+            // {
+            //     const_iterator it = this->begin();
+            //     for(; it != this->end(); ++it)
+            //     {
+            //         if (_cmp(it->first, k))
+            //             it++;
+            //         else
+            //             break;
+            //     }
+            //     return (it);
+            // }
+            return (const_iterator(_tree.upper_bound(k), &_tree));
         }
         pair<iterator,iterator> equal_range (const key_type& k)
         {
