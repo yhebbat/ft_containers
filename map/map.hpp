@@ -164,7 +164,7 @@ namespace ft
         {
             return _tree.delete_(k);
         }
-        void erase(iterator first, iterator last)//to check look at fct li lta7t
+        void erase(iterator first, iterator last)
         {
             ft::vector<key_type> v;
             while (first != last)
@@ -173,7 +173,7 @@ namespace ft
                 v.push_back(first->first);
                 ++first;
             }
-            for (int i = 0; i < v.size(); i++)
+            for (size_t i = 0; i < v.size(); i++)
                 erase(v[i]);
         }
         

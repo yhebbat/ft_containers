@@ -45,11 +45,11 @@ namespace ft
 		////////////--------------------CONSTRACTORS && DESTRACTOS--------------------////////////
 		//////////////////////////////////////////////////////////////////////////////////////////
 			explicit vector (const allocator_type& alloc = allocator_type()):
-				_alloc(alloc), _first(nullptr), _last(nullptr), _size(0), _capacity(0){};
+				_alloc(alloc), _size(0), _capacity(0), _first(nullptr), _last(nullptr){};
 
 			explicit vector (size_type n, const value_type& val = value_type(),
 				const allocator_type& alloc = allocator_type()):
-				_alloc(alloc), _first(nullptr), _last(nullptr), _size(0), _capacity(0)
+				_alloc(alloc),_size(0), _capacity(0), _first(nullptr),  _last(nullptr)
 				{
 					if (n > alloc.max_size())
 						throw std::length_error("vector");
@@ -67,7 +67,7 @@ namespace ft
 			template <class InputIterator>
 				vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()
 				,typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())://to_check
-				_alloc(alloc), _first(nullptr), _last(nullptr), _size(0), _capacity(0)
+				_alloc(alloc), _size(0), _capacity(0), _first(nullptr), _last(nullptr)
 				{
 					this->_capacity = this->_size = last - first;
 					this->_first = this->_alloc.allocate(this->_size);
@@ -77,7 +77,7 @@ namespace ft
 				};
 
 			vector (const vector& x):
-			 _first(nullptr), _last(nullptr), _size(0), _capacity(0) { *this = x; };
+			  _size(0), _capacity(0),_first(nullptr), _last(nullptr) { *this = x; };
 		
             ~vector()
 			{
@@ -187,7 +187,7 @@ namespace ft
 					pointer begin, end;
 					begin = _alloc.allocate(n);
 					end = begin + _size;
-					for (int i = 0; i < _size; i++)
+					for (size_t i = 0; i < _size; i++)
 						_alloc.construct((begin + i), *(_first + i));
 					for (pointer it = _first; it < _last; it++)
 						_alloc.destroy(it);
@@ -393,7 +393,7 @@ namespace ft
 				if(position + 1 != this->_last)
 				{
 					this->_alloc.destroy(here);
-					for (size_t i = 0; i < this->_last - here - 1; i++)
+					for (long i = 0; i < this->_last - here - 1; i++)
 					{
 						this->_alloc.construct(here + i, *(here + i + 1));
 					}		
@@ -410,7 +410,7 @@ namespace ft
 				// size_type dist = _last - pos_last;
 				for (pointer i = pos_first; i < pos_last; i++)
 					this->_alloc.destroy(i);
-				for (size_t i = 0; i < _last - pos_last; i++)
+				for (long i = 0; i < _last - pos_last; i++)
 					this->_alloc.construct((pos_first + i), *(pos_last + i));
 				// for (size_t i = 0; i < _end - plast; i++)
 				// 	_alloc.destroy(_first + i);

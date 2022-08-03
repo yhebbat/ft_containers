@@ -2269,7 +2269,7 @@ int main()
     TEST_CASE(testNonMemberSwap);
     std::cout << std::endl; //* good
 
-    system("leaks a.out");
+    system("leaks map");
     
     return 0;
 }

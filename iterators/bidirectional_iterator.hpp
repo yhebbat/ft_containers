@@ -38,7 +38,6 @@ namespace ft
                 return *this;
             };
 
-            // friend bool operator== (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return lhs._node == rhs._node; };//check if it can work without friend
 		    bool operator==(const bidirectional_iterator & a) const
             {
                 if (this->_node == a._node)
@@ -46,7 +45,7 @@ namespace ft
                 else
                     return false;
             }
-            // friend bool operator!= (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return (!(lhs == rhs)); };//check if it can work without friend
+
             bool operator!=(const bidirectional_iterator & a) const
             {
                 if (this->_node == a._node)

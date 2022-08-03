@@ -74,7 +74,7 @@ namespace ft
     };
 
     template < class T, typename  Compare = std::less<typename T::first_type>,
-     class Alloc = std::allocator<T> >//,class Allconode = std::allocator<node<T> > >
+     class Alloc = std::allocator<T> >//, class Allconode = std::allocator<node<T, Alloc> > >
     class avl_tree
     {
     public:
@@ -87,10 +87,10 @@ namespace ft
         node_type		*_root;
 
         private:
+        size_t			_size;
         Compare         _compare;
         allocator_type	_alloc;
         alloc_node		_alloc_node;
-        size_t			_size;
 
         public:
         avl_tree():_root(NULL) ,_size(0) , _compare(), _alloc(), _alloc_node(){};
