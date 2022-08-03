@@ -38,9 +38,22 @@ namespace ft
                 return *this;
             };
 
-            friend bool operator== (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return lhs._node == rhs._node; };//check if it can work without friend
-		    friend bool operator!= (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return (!(lhs == rhs)); };//check if it can work without friend
-
+            // friend bool operator== (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return lhs._node == rhs._node; };//check if it can work without friend
+		    bool operator==(const bidirectional_iterator & a) const
+            {
+                if (this->_node == a._node)
+                    return true;
+                else
+                    return false;
+            }
+            // friend bool operator!= (const bidirectional_iterator& lhs, const bidirectional_iterator& rhs) { return (!(lhs == rhs)); };//check if it can work without friend
+            bool operator!=(const bidirectional_iterator & a) const
+            {
+                if (this->_node == a._node)
+                    return false;
+                else
+                    return true;
+            }
             reference operator*() const{ return _node->data; };
             pointer operator->() const{ return &(_node->data); };
 
@@ -74,28 +87,6 @@ namespace ft
                 }
                 return (*this);
             };
-            // bidirectional_iterator& operator++ (){
-            //     if (_node == NULL){
-            //         _node = _tree->_root;
-            //         while (_node != NULL && _node->left != NULL) // min value in the tree
-            //             _node = _node->left;
-            //     }
-            //     else if (_node->right != NULL){
-            //         // successor = smallest value in the right subtree
-            //         _node = _node->right;
-            //         while (_node->left != NULL)
-            //             _node = _node->left;
-            //     }
-            //     else{
-            //         node_type* new_parent = _node->parent;
-            //         while (new_parent != NULL && _node == new_parent->right){
-            //             _node = new_parent;
-            //             new_parent = new_parent->parent;
-            //         }
-            //         _node = new_parent;
-            //     }
-            //     return (*this);
-		    // }
             bidirectional_iterator operator++(int)//TO check
             {
                 bidirectional_iterator tmp(*this);
