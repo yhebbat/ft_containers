@@ -15,18 +15,29 @@ int main()
         std_m.insert(ft::make_pair(i, i));
 
         // ft_m.insert(ft::make_pair(i + 1, i));
-    // for (int i = 3; i < 13; ++i)
-    //     std_m.insert(ft::make_pair(i, i));
-
+    for (int i = 3; i < 13; ++i)
+        std_m.insert(ft::make_pair(i, i));
+    for (int i = 3; i < 13; ++i)
+        ft_m.insert(std::make_pair(i, i));
     // if (ft_m == std_m)
     //     std::cout << "blaan" << std::endl;
     // exit(0);
-    // std::cout << "mine : "<< ft_m.upper_bound(300)->first << std::endl;
-    // std::cout << "std : "<< std_m.upper_bound(300)->first << std::endl;
+    std::cout << "mine : "<< ft_m.lower_bound(300)->first << std::endl;
+    std::cout << "std : "<< std_m.lower_bound(300)->first << std::endl;
     // ft::map<int, int> m;
-    std::map<int, int>::const_iterator it = ft_m.end();
-    for (;it != ft_m.begin(); it--)
-        std::cout << it->first << std::endl;
+    ft::map<int, int>::const_iterator it = std_m.end();
+    for (;it != std_m.begin(); it--)
+    {
+        if (it != std_m.end())
+            std::cout << "mine" << it->first << std::endl;
+    }
+    std::cout << "========" << std::endl;
+    std::map<int, int>::const_iterator itt = ft_m.end();
+    for (;itt != ft_m.begin(); itt--)
+    {
+        // if (itt != ft_m.end())
+            std::cout << "ss"<< itt->first << std::endl;
+    }
     // m.insert(ft::make_pair(1, 1));
     // m.insert(ft::make_pair(2, 2));
     // m.insert(ft::make_pair(3, 3));

@@ -210,106 +210,38 @@ namespace ft
         }
         iterator lower_bound (const key_type& k)
         {
-            // if (_tree.exist(k))
-            //     return iterator(_tree.search(k), &_tree);}
-            // else if (_cmp(k, _tree.find_min()->data.first))
-            //     return this->begin();}
-            // else if (_cmp(_tree.find_max()->data.first, k))
-            //     return this->end();
-            // else
+            // if (_tree.lower_bound(k) == NULL)
             // {
-            //     iterator it = this->begin();
-            //     for(; it != this->end(); ++it)
-            //     {
-            //         if (_cmp(it->first, k))
-            //             it++;
-            //         else
-            //             break;
-            //     }
-            //     return (it);
+            //     node_type rot(ft::make_pair(0,0));
+            //     return (iterator(&rot, &_tree));
             // }
             return (iterator(_tree.lower_bound(k), &_tree));
 
         }
         const_iterator lower_bound (const key_type& k) const
         {
-            // std::cout << "ddddddddd" << std::endl;
-
-            // if (_tree.exist(k))
-            //     return const_iterator(_tree.search(k), &_tree);
-            // else if (_cmp(k, _tree.find_min()->data.first))
-            // {    std::cout << "ddd 0" << std::endl;
-            //     return this->begin();}
-            // else if (_cmp(_tree.find_max()->data.first, k))
+            // if (_tree.lower_bound(k) == NULL)
             // {
-            //     std::cout << "ddd" << std::endl;
-            //     return this->end();
-            // }
-            // else
-            // {
-            //     std::cout << "ddd 0" << std::endl;
-
-            //     const_iterator it = this->begin();
-            //     for(; it != this->end(); ++it)
-            //     {
-            //         if (_cmp(it->first, k))
-            //             it++;
-            //         else
-            //             break;
-            //     }
-            //     return (it);
+            //     node_type rot(ft::make_pair(0,0));
+            //     return (const_iterator(&rot, &_tree));
             // }
             return (const_iterator(_tree.lower_bound(k), &_tree));
         }
         iterator upper_bound (const key_type& k)
         {
-            // if (_tree.exist(k))
+            // if (_tree.upper_bound(k) == NULL)
             // {
-            //     iterator it = this->find(k);
-            //     it++;
-            //     return it;
-            // }
-            // else if (_cmp(k, _tree.find_min()->data.first))
-            //     return this->begin();
-            // else if (_cmp(_tree.find_max()->data.first, k))
-            //     return this->end();
-            // else
-            // {
-            //     iterator it = this->begin();
-            //     for(; it != this->end(); ++it)
-            //     {
-            //         if (_cmp(it->first, k))
-            //             it++;
-            //         else
-            //             break;
-            //     }
-            //     return (it);
+            //     node_type rot(ft::make_pair(0,0));
+            //     return (iterator(&rot, &_tree));
             // }
             return (iterator(_tree.upper_bound(k), &_tree));
         }
         const_iterator upper_bound (const key_type& k) const
         {
-            // if (_tree.exist(k))
+            // if (_tree.upper_bound(k) == NULL)
             // {
-            //     const_iterator it = this->find(k);
-            //     it++;
-            //     return it;
-            // }
-            // else if (_cmp(k, _tree.find_min()->data.first))
-            //     return this->begin();
-            // else if (_cmp(_tree.find_max()->data.first, k))
-            //     return this->end();
-            // else
-            // {
-            //     const_iterator it = this->begin();
-            //     for(; it != this->end(); ++it)
-            //     {
-            //         if (_cmp(it->first, k))
-            //             it++;
-            //         else
-            //             break;
-            //     }
-            //     return (it);
+            //     node_type rot(ft::make_pair(0,0));
+            //     return (const_iterator(&rot, &_tree));
             // }
             return (const_iterator(_tree.upper_bound(k), &_tree));
         }
@@ -370,5 +302,6 @@ namespace ft
                     }
     template <class Key, class T, class Compare, class Alloc>
       void swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y){x.swap(y);}
+
 }
 #endif

@@ -7,7 +7,7 @@ OBJECT = $(SRC:.cpp=.o)
 all : $(NAME)
 
 $(NAME):
-	@c++ -Wall -Wextra -Werror $(SRC) -o $(NAME) 
+	@c++ $(SRC) -o $(NAME) 
 	@echo "✅✅✅"
 
 clean:
