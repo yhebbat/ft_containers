@@ -28,6 +28,11 @@ namespace ft
             bidirectional_iterator(  node_type *n, tree_type *t) :  _node(n),  _tree(t) { };
 
             bidirectional_iterator(const bidirectional_iterator &other) {*this = other;};
+            // template < typename C, typename TT, typename N, typename TTT >
+            // bidirectional_iterator(const bidirectional_iterator<C, TT, N, TTT > &other)
+            // {
+            //     *this = other;
+            // };
             ~bidirectional_iterator() {};
 
             bidirectional_iterator &operator=(const bidirectional_iterator &other)
@@ -63,7 +68,7 @@ namespace ft
                     while (_node != NULL && _node->left != NULL) // min value in the tree
                         _node = _node->left;
                 }
-                else if(_node->right)
+                if(_node->right)
                 {
                     _node = _node->right;
                     while (_node->left != NULL)
@@ -84,6 +89,8 @@ namespace ft
                         _node = dad;
                     }
                 }
+                else if (_node == _tree->find_max())
+                    _node = NULL;
                 return (*this);
             };
             bidirectional_iterator operator++(int)//TO check
@@ -122,6 +129,8 @@ namespace ft
                         _node = dad;
                     }
                 }
+                else if (_node == _tree->find_min())
+                    _node = NULL;
                 return (*this);
             };
             bidirectional_iterator operator--(int)//to check
@@ -133,9 +142,10 @@ namespace ft
 
             node_type *get_node() const { return _node; };
             
-            operator bidirectional_iterator<iterator_category, const tree_type, const node_type, const T>(){
-			return bidirectional_iterator<iterator_category, const tree_type, const node_type, const T>(_node, _tree);
-		}
+            operator bidirectional_iterator<iterator_category, const tree_type, const node_type, const T>()
+            {
+			    return bidirectional_iterator<iterator_category, const tree_type, const node_type, const T>(_node, _tree);
+		    }
             
     };
 

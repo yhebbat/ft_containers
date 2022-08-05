@@ -7,17 +7,26 @@
 int main()
 {
 
-    ft::map<int, int> ft_m;
-    std::map<int, int> std_m;
-    for (int i = 3; i < 13; ++i)
-        ft_m.insert(ft::make_pair(i, i));
-    for (int i = 3; i < 13; ++i)
-        std_m.insert(std::make_pair(i, i));
+    std::map<int, int> ft_m;
+    ft::map<int, int> std_m;
+    int i = 0;
+    // for (int i = 3; i < 13; ++i)
+        ft_m.insert(std::make_pair(i, i));
+        std_m.insert(ft::make_pair(i, i));
 
-    std::cout << "mine : "<< ft_m.upper_bound(300)->first << std::endl;
-    std::cout << "std : "<< std_m.upper_bound(300)->first << std::endl;
+        // ft_m.insert(ft::make_pair(i + 1, i));
+    // for (int i = 3; i < 13; ++i)
+    //     std_m.insert(ft::make_pair(i, i));
+
+    // if (ft_m == std_m)
+    //     std::cout << "blaan" << std::endl;
+    // exit(0);
+    // std::cout << "mine : "<< ft_m.upper_bound(300)->first << std::endl;
+    // std::cout << "std : "<< std_m.upper_bound(300)->first << std::endl;
     // ft::map<int, int> m;
-
+    std::map<int, int>::const_iterator it = ft_m.end();
+    for (;it != ft_m.begin(); it--)
+        std::cout << it->first << std::endl;
     // m.insert(ft::make_pair(1, 1));
     // m.insert(ft::make_pair(2, 2));
     // m.insert(ft::make_pair(3, 3));

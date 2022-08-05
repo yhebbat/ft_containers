@@ -309,6 +309,7 @@ namespace ft
 			iterator insert (iterator position, const value_type& val)
 			{
 				size_t dist_from_last = _last - &(*position);
+
 				if (this->_capacity == 0)
 				{
 					this->_first = this->_alloc.allocate(1);
@@ -319,10 +320,9 @@ namespace ft
 				}
 				if (this->_size == this->_capacity)
 					reserve(this->_capacity * 2);
-				size_t i;
-				for (i = 0; i < dist_from_last; i++)
-					this->_alloc.construct(_last - i, *(_last - i - 1));
-				this->_alloc.construct(_last - i, val);
+				for (size_t i = size(); i > dist_from_last; i--)
+					this->_alloc.construct(_first + i, *(_first + (i - 1)));
+				this->_alloc.construct(_first + dist_from_last, val);
 				_last++;
 				_size++;
 				return(_first + dist_from_last);
@@ -365,7 +365,9 @@ namespace ft
 				{
 					reserve(n);
 					for (size_type i = 0; i < n; i++, first++)
+					{
 						_alloc.construct(_first + i , *(&(*first)));
+					}
 					_size += n;
 					return;
 				}

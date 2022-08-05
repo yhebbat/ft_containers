@@ -76,7 +76,11 @@
         "map": "cpp",
         "__tree": "cpp",
         "numeric": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "*.ipp": "cpp",
+        "csignal": "cpp",
+        "fstream": "cpp",
+        "set": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
