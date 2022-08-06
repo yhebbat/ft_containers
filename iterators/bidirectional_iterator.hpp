@@ -9,37 +9,40 @@
 
 namespace ft
 {
-    template < typename Category, typename Tree, typename Node, typename T, typename Distance = ptrdiff_t, typename Pointer = T*, typename Reference = T&>
+    template < typename Value_type, typename node_type>
     class bidirectional_iterator
     {
         public: 
-            typedef Category 	iterator_category;
-            typedef T			value_type;
-            typedef Distance	difference_type;
-            typedef Pointer		pointer;
-            typedef Reference	reference;
-            typedef Node		node_type;
-            typedef Tree		tree_type;
+            typedef typename std::bidirectional_iterator_tag	       iterator_category;
+            typedef Value_type			                                 value_type;
+            typedef ptrdiff_t	                                        difference_type;
+            typedef value_type*		                                        pointer;
+            typedef value_type&	                                        reference;
+            // typedef Node		                                        node_type;
+            // typedef Tree		                                        tree_type;
+            // typedef typename ft::node<T, typename Tree::allocator_type> Node;
         private:
-			node_type		    *_node;
-			tree_type			*_tree;
+			node_type		    _node;
+			node_type			_root;
         public:
-            bidirectional_iterator() : _node(), _tree() {}
-            bidirectional_iterator(  node_type *n, tree_type *t) :  _node(n),  _tree(t) { };
+            bidirectional_iterator() : _node(), _root() {}
+            bidirectional_iterator( node_type n, node_type t) :  _node(n),  _root(t) { };
 
             bidirectional_iterator(const bidirectional_iterator &other) {*this = other;};
-            // template < typename C, typename TT, typename N, typename TTT >
-            // bidirectional_iterator(const bidirectional_iterator<C, TT, N, TTT > &other)
-            // {
-            //     *this = other;
-            // };
+            template <typename U, typename V>
+            bidirectional_iterator(const bidirectional_iterator<U, V> &other)
+            {
+                this->_node = other.get_node();
+                this->_root = other.get_root();
+            };
+
             ~bidirectional_iterator() {};
 
             bidirectional_iterator &operator=(const bidirectional_iterator &other)
             { 
 
-                this->_node = other._node;
-                this->_tree = other._tree;
+                this->_node = other.get_node();
+                this->_root = other.get_root();
                 return *this;
             };
 
@@ -64,8 +67,8 @@ namespace ft
             bidirectional_iterator &operator++()//to do
             {
                 if (_node == NULL){
-                    _node = _tree->_root;
-                    while (_node != NULL && _node->left != NULL) // min value in the tree
+                    _node = _root;
+                    while (_node != NULL && _node->left != NULL) // min value
                         _node = _node->left;
                 }
                 if(_node->right)
@@ -76,7 +79,7 @@ namespace ft
                 }
                 else if(_node->parent)
                 {
-                    node_type *dad = _node->parent;
+                    node_type dad = _node->parent;
                     if (dad->left == _node)
                         _node = dad;
                     else if(dad->right == _node)
@@ -89,7 +92,7 @@ namespace ft
                         _node = dad;
                     }
                 }
-                else if (_node == _tree->find_max())
+                else if (_node == max(_root))
                     _node = NULL;
                 return (*this);
             };
@@ -104,8 +107,8 @@ namespace ft
                 // // _node = _tree->find_prev(_node);
                 // // return *this;
                 if (_node == NULL){
-                    _node = _tree->_root;
-                    while (_node != NULL && _node->right != NULL) // max value in the tree
+                    _node = _root;
+                    while (_node != NULL && _node->right != NULL) // max value
                         _node = _node->right;
                 }
                 else if(_node->left)
@@ -116,7 +119,7 @@ namespace ft
                 }
                 else if(_node->parent)
                 {
-                    node_type *dad = _node->parent;
+                    node_type dad = _node->parent;
                     if (dad->right == _node)
                         _node = dad;
                     else if(dad->left == _node)
@@ -129,7 +132,7 @@ namespace ft
                         _node = dad;
                     }
                 }
-                else if (_node == _tree->find_min())
+                else if (_node == min(_root))
                     _node = NULL;
                 return (*this);
             };
@@ -140,12 +143,32 @@ namespace ft
                 return tmp;
             };
 
-            node_type *get_node() const { return _node; };
+            node_type get_node() const { return _node; };
             
-            operator bidirectional_iterator<iterator_category, const tree_type, const node_type, const T>()
+            operator bidirectional_iterator<const value_type, node_type>()
             {
-			    return bidirectional_iterator<iterator_category, const tree_type, const node_type, const T>(_node, _tree);
+			    return bidirectional_iterator<const value_type, node_type>(_node, _root);
 		    }
+            
+            node_type get_root()const{
+                return _root;
+            }
+
+            private:
+            node_type max(node_type root){
+                node_type tmp = root;
+                while (tmp != NULL && tmp->right != NULL) // max value
+                        tmp = tmp->right;
+                return tmp;
+            }
+
+            node_type min(node_type root){
+                node_type tmp = root;
+                while (tmp != NULL && tmp->left != NULL) // min value
+                        tmp = tmp->left;
+                return tmp;
+            }
+
             
     };
 

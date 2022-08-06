@@ -8,6 +8,8 @@
 #include <iostream>
 #include <iterator>
 #include <vector>
+#include <unistd.h>
+#include <ctime>
 
 // class MyIterator : public std::iterator<std::input_iterator_tag, int>
 // {
@@ -26,12 +28,7 @@
 int main () {
     ft::vector<char> t;
 
-    t.push_back('u');
-    t.push_back('e');
-    t.push_back('d');
-    t.push_back('f');
-    t.push_back('C');
-
+  
     // ft::vector<char>::reverse_iterator r = t.rbegin();
 
     // ft::vector<char>::reverse_iterator it;

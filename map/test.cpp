@@ -3,41 +3,44 @@
 #include "../utilities/utilities.hpp"
 #include <map>
 #include <iostream>
+#include <unistd.h>
+#include <ctime>
 
 int main()
 {
-
+    // time_t ti = time(NULL);
     std::map<int, int> ft_m;
     ft::map<int, int> std_m;
     int i = 0;
-    // for (int i = 3; i < 13; ++i)
+    for (int i = 3; i < 13; ++i)
+    {
+
         ft_m.insert(std::make_pair(i, i));
         std_m.insert(ft::make_pair(i, i));
+    }
 
         // ft_m.insert(ft::make_pair(i + 1, i));
     for (int i = 3; i < 13; ++i)
         std_m.insert(ft::make_pair(i, i));
-    for (int i = 3; i < 13; ++i)
-        ft_m.insert(std::make_pair(i, i));
+
     // if (ft_m == std_m)
     //     std::cout << "blaan" << std::endl;
     // exit(0);
-    std::cout << "mine : "<< ft_m.lower_bound(300)->first << std::endl;
-    std::cout << "std : "<< std_m.lower_bound(300)->first << std::endl;
+    std_m.insert(ft::make_pair(10, 10));
+    std_m.insert(ft::make_pair(20, 20));
+    std_m.insert(ft::make_pair(30, 30));
+    std_m.insert(ft::make_pair(40, 40));
+    std_m.insert(ft::make_pair(50, 50));
+    std_m.insert(ft::make_pair(60, 60));
+    // std::pair<std::map<int, int>::const_iterator , std::map<int, int>::const_iterator>& pair = std_m.equal_range(10);
+    // const ft::pair<ft::map<int, int>::const_iterator , ft::map<int, int>::const_iterator>& pair = std_m.equal_range(10);
+    std::cout << "mine : "<< std_m.upper_bound(3)->first << std::endl;
+    std::cout << "std : "<< std_m.upper_bound(3)->first << std::endl;
+    // std::cout << difftime(time(NULL),  ti) * 1000 <<std::endl;
     // ft::map<int, int> m;
-    ft::map<int, int>::const_iterator it = std_m.end();
-    for (;it != std_m.begin(); it--)
-    {
-        if (it != std_m.end())
-            std::cout << "mine" << it->first << std::endl;
-    }
-    std::cout << "========" << std::endl;
-    std::map<int, int>::const_iterator itt = ft_m.end();
-    for (;itt != ft_m.begin(); itt--)
-    {
-        // if (itt != ft_m.end())
-            std::cout << "ss"<< itt->first << std::endl;
-    }
+    // ft::map<int, int>::const_iterator it = std_m.end();
+    // for (;it != std_m.begin(); --it)
+    //     std::cout << it->first << std::endl;
     // m.insert(ft::make_pair(1, 1));
     // m.insert(ft::make_pair(2, 2));
     // m.insert(ft::make_pair(3, 3));

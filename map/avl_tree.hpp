@@ -74,7 +74,7 @@ namespace ft
     };
 
     template < class T, typename  Compare = std::less<typename T::first_type>,
-     class Alloc = std::allocator<T> >//, class Allconode = std::allocator<node<T, Alloc> > >
+     class Alloc = std::allocator<T> > //, class Allconode = std::allocator<node<T, Alloc> > >
     class avl_tree
     {
     public:
@@ -293,6 +293,22 @@ namespace ft
             return ret;
         }
 
+        node_type *upper_bound(key_type data) {
+
+            node_type *ret = NULL;
+            node_type *node = _root;
+            while(node != NULL){
+                if (_compare(data, node->data.first))
+                {
+                    ret = node;
+                    node = node->left;
+                }
+                else
+                    node = node->right;
+            }
+            return ret;
+        }
+
         node_type *lower_bound(key_type data) const {
 
             node_type *ret = NULL;
@@ -313,6 +329,28 @@ namespace ft
             }
             return ret;
         }
+
+        node_type *lower_bound(key_type data) {
+
+            node_type *ret = NULL;
+            node_type *node = _root;
+            if (exist(node, data))
+            {
+                node_type *ret = search(data);
+                return ret;
+            }
+            while(node != NULL){
+                if (_compare(data, node->data.first))
+                {
+                    ret = node;
+                    node = node->left;
+                }
+                else
+                    node = node->right;
+            }
+            return ret;
+        }
+
         bool exist(T data) const
         {
             return exist_(_root, data);
